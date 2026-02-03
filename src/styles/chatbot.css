@@ -1,0 +1,144 @@
+.floating-chat {
+  position: fixed;
+  bottom: 0;
+  right: 20px;
+  width: 300px;
+  background: #fff;
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  overflow: hidden;
+  font-family: inherit;
+}
+
+.floating-chat.minimized {
+  height: 48px;
+}
+
+.floating-chat.open {
+  height: 420px;
+}
+
+.chat-header {
+  height: 48px;
+  background: #0a66c2;
+  color: #fff;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.chat-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.chat-toggle {
+  font-size: 20px;
+}
+
+.chat-body {
+  padding: 10px;
+  overflow-y: auto;
+  height: calc(100% - 48px);
+}
+
+.chat-user {
+  display: flex;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  color: #000;
+}
+
+.chat-user:hover {
+  background: #f3f3f3;
+}
+
+.chat-user img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.chat-user h6 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.chat-user p {
+  margin: 0;
+  font-size: 12px;
+  color: #666;
+}
+.chat-top-tabs {
+  display: flex;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.chat-top-tabs button {
+  flex: 1;
+  padding: 10px 0;
+  background: none;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+  color: #555;
+}
+
+.chat-top-tabs button.active {
+  color: #0a66c2;
+  font-weight: 500;
+  border-bottom: 2px solid #0a66c2;
+}
+
+.chat-list {
+  padding: 8px;
+}
+
+.ai-box {
+  padding: 12px;
+}
+
+.ai-title {
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.ai-input {
+  width: 100%;
+  padding: 8px;
+  font-size: 13px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.ai-question-list {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+}
+
+.ai-question {
+    background: #e8f2ff;            /* orange */
+  color: #0a66c2;             /* blue text */
+  padding: 8px 10px;
+  font-size: 13px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+}
+
+.ai-question:hover {
+     background: #d6e8ff;  
+}

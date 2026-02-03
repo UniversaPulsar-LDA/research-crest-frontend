@@ -1,0 +1,431 @@
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.modal-box {
+    width: 70vw;
+    height: 70vh;
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.upload-area {
+    border: 2px dashed #d1d5db;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 18px;
+    max-width: 600px;
+    min-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.pdf-icon {
+    width: 50px;
+    height: 50px;
+    color: #6b7280;
+    margin-bottom: 10px;
+}
+
+.btn-rsu-upld,
+.btn-rsu-cnsl {
+    color: #000;
+    background: #D7C9F2;
+    border-radius: 40px;
+    border-color: none;
+    border: none;
+    padding: 5px 10px;
+    font-weight: 600;
+}
+
+.btn-rsu-cnsl {
+    background: #dc3b3b;
+    color: #ffffff;
+}
+
+/* project modal */
+.pj-full-bar-chart {
+    width: 100%;
+    margin: 15px 0;
+}
+
+.pj-full-bar-chart img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+/* BAR CHART */
+.pj-chart-container {
+    width: 100%;
+    margin-top: 15px;
+    background: #fff;
+    padding: 10px;
+}
+
+.pj-chart-legend {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    font-size: 10px;
+    margin-bottom: 10px;
+}
+
+.pj-chart-legend i {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    margin-right: 5px;
+}
+
+.pj-bar-chart-visual {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 150px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+
+.pj-month-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 14%;
+}
+
+.pj-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 120px;
+    width: 100%;
+    justify-content: center;
+}
+
+.pj-bar-light {
+    width: 12px;
+    background: #00e5ff;
+    /* Light Blue */
+    border-radius: 2px 2px 0 0;
+}
+
+.pj-bar-dark {
+    width: 12px;
+    background: #001a4d;
+    /* Dark Blue */
+    border-radius: 2px 2px 0 0;
+}
+
+.pj-month-label {
+    font-size: 9px;
+    color: #888;
+    margin-top: 8px;
+}
+
+/* Bottom Flex Layout (Donut + Collab Side by Side) */
+.pj-bottom-container {
+    display: flex;
+    gap: 40px;
+    margin-top: 20px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.pj-donut-side {
+    flex: 1 1;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-direction: column;
+}
+
+.pj-collab-side {
+    flex: 1;
+    border-left: 1px solid #f5f5f5;
+    padding-left: 20px;
+}
+
+/* Donut Visual via CSS */
+.pj-donut-visual-css {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: conic-gradient(#00a0a0 0% 20%, #1a237e 20% 85%, #e0e0e0 85% 100%);
+    position: relative;
+    flex-shrink: 0;
+}
+
+.pj-donut-visual-css::after {
+    content: "";
+    width: 60px;
+    height: 60px;
+    background: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* 6. Typography & Details */
+.pj-modal-title {
+    color: #008080;
+    font-size: 18px;
+    /* margin-bottom: 20px; */
+}
+
+.pj-modal-title span {
+    color: #000;
+    font-weight: bold;
+}
+
+.pj-label {
+    color: #008080;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.pj-tagline-text {
+    font-size: 13px;
+    color: #333;
+    line-height: 1.4;
+}
+
+.pj-val {
+    font-weight: 700;
+    color: #000;
+}
+
+.pj-lib-dot {
+    font-weight: bold;
+    margin-left: 8px;
+    font-size: 12px;
+}
+
+.ttl {
+    color: #00a0a0;
+}
+
+.green {
+    color: #2ecc71;
+}
+
+.dark-teal {
+    color: #008080;
+}
+
+.blue {
+    color: #3498db;
+}
+
+/* 7. User Row Styling */
+.pj-user-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f9f9f9;
+}
+
+.pj-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+}
+
+.pj-u-meta h6 {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.pj-u-meta p {
+    margin: 0;
+    font-size: 11px;
+    color: #999;
+}
+
+.pj-purple-arrow {
+    margin-left: auto;
+    background: #8e74ff;
+    color: #fff;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.pj-donut-caption {
+    font-size: 10px;
+    color: #999;
+    margin-top: 10px;
+    line-height: 1.2;
+}
+
+.pj-lft {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.pj-top-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.pj-info-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.pj-tagline-textt {
+    text-align: left;
+}
+
+.pj-close-btn {
+    font-size: 30px;
+    text-decoration: none;
+    color: #000000;
+    background: none;
+    background: none;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    cursor: pointer;
+    justify-self: end;
+}
+
+.modal-headerr {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.pj-paper-images {
+    margin-top: 12px;
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+}
+
+.pj-paper-slide img {
+    width: 300px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.pj-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    padding: 20px 0;
+    overflow-y: auto;
+    margin-top: 70px;
+}
+
+.pj-modal-box {
+    width: 70vw;
+    height: auto;
+    background: #fff;
+    border-radius: 10px;
+    padding: 30px 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 30px 0;
+    max-height: calc(100vh - 80px);
+    overflow: visible;
+}
+
+.pj-hed-br {
+    border-bottom: 1px solid #CDC6B8;
+    width: 100%;
+    text-align: left;
+}
+.pj-donut-flx{
+    display: flex;
+    justify-content: flex-start;
+    gap: 4vw;
+    align-items: center;
+}
+.pj-donut-visual-css {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+
+  /* 🔥 donut depth control */
+  -webkit-mask: radial-gradient(
+    circle,
+    transparent 60%,   /* ⬅️ hole size (increase = deeper) */
+    black 61%
+  );
+  mask: radial-gradient(
+    circle,
+    transparent 35%,
+    black 6%
+  );
+
+  transition: background 0.6s ease;
+}
+
+.pj-stat-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.pj-stat-box {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+.pj-stat-box.collab {
+  background-color: #009299;
+}
+
+.pj-stat-box.self {
+  background-color: #1f2937; /* dark */
+}
+
+.pj-stat-value{
+    display: flex;
+    justify-content: center;
+}

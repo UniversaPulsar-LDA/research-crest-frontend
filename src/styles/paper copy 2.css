@@ -1,0 +1,290 @@
+.paper-container {
+  max-width: 1100px;
+  margin: 30px auto;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #111827;
+}
+
+.paper-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.badges {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.badge {
+  font-size: 13px;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+.badge.preprint {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.badge.file {
+  background: #ecfeff;
+  color: #0f766e;
+}
+
+.title {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 8px 0;
+}
+
+.meta {
+  color: #6b7280;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.authors {
+  font-size: 15px;
+  color: #374151;
+}
+
+.right {
+  min-width: 260px;
+}
+
+.statakt {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 8px 0;
+  font-size: 14px;
+}
+
+.warning {
+  background: #fde68a;
+  padding: 12px;
+  margin: 20px 0;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 10px;
+}
+
+.tabs button {
+  background: none;
+  border: none;
+  font-size: 15px;
+  padding: 6px 8px;
+  cursor: pointer;
+  color: #374151;
+}
+
+.tabs button.active {
+  border-bottom: 2px solid #2563eb;
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.download-btn {
+  margin-left: auto;
+  background: #2563eb;
+  color: white;
+  padding: 8px 18px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.download-btn:hover {
+  background: #1d4ed8;
+}
+
+.content {
+  background: #f9fafb;
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 6px;
+}
+
+.loading,
+.error {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 18px;
+}
+
+.dld-btn {
+  margin-left: auto;
+  background: #2563eb;
+  color: white;
+  padding: 8px 18px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.badge.dynprint {
+  background: none;
+  color: #0369a1;
+}
+
+.paper-slider {
+  max-width: 900px;
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  margin: 16px 0;
+  padding-bottom: 6px;
+}
+
+.paper-slider::-webkit-scrollbar {
+  height: 6px;
+}
+
+.paper-slider::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+.slide {
+  min-width: 300px;
+  flex-shrink: 0;
+}
+
+.projtt-container{
+  display: flex;
+    justify-content: center;
+    max-width: 1100px;
+    margin: 30px auto;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #111827;
+    flex-direction: column;
+    align-items: stretch;
+}
+/* GitHub Contributions */
+.gh-contributions {
+  margin-top: 32px;
+  padding: 16px 18px;
+  border: 1px solid #d0d7de;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.gh-header {
+  font-size: 14px;
+  font-weight: 600;
+  color: #24292f;
+  margin-bottom: 10px;
+}
+
+.gh-body {
+  position: relative;
+}
+
+.gh-months {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  font-size: 12px;
+  color: #57606a;
+  margin-left: 34px;
+  margin-bottom: 6px;
+}
+
+.gh-grid {
+  display: flex;
+  gap: 3px;
+}
+
+.gh-column {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.gh-day {
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+  background: #ebedf0;
+}
+
+/* Contribution levels */
+.level-0 {
+  background: #ebedf0;
+}
+.level-1 {
+  background: #9be9a8;
+}
+.level-2 {
+  background: #40c463;
+}
+.level-3 {
+  background: #30a14e;
+}
+.level-4 {
+  background: #216e39;
+}
+
+/* Footer */
+.gh-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  font-size: 12px;
+  color: #57606a;
+  margin-top: 10px;
+}
+
+.gh-legend {
+  display: flex;
+  gap: 3px;
+}
+
+.gh-legend span {
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+}
+
+.gh-grid {
+  display: flex;
+}
+
+.gh-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.dltt-btn.sent {
+  background: #22c55e; /* green */
+  color: #fff;
+  cursor: default;
+  border: none;
+}
+
+.dld-btt:disabled {
+  opacity: 0.9;
+}
+
+.dltt-btn{
+  color: #fff;
+  cursor: default;
+  border: none;
+}
+
+.txca {
+  background: #2563eb !important;
+  color: #fff !important;
+  cursor: default;
+  border: none;
+}
+

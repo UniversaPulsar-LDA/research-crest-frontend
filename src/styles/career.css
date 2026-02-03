@@ -1,0 +1,443 @@
+
+/* Category Grid */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.cat-item {
+    background: #fff;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px; 
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cat-item:hover {
+    border-color: var(--teal);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 139, 139, 0.05);
+}
+
+.icon-box {
+    width: 42px; /* কিছুটা ছোট ও স্মার্ট সাইজ */
+    height: 42px;
+    min-width: 42px;
+    background: var(--light-teal);
+    color: var(--teal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 18px;
+}
+
+.cat-text .title { 
+    font-weight: 600; 
+    font-size: 13px; /* ছোট ফন্ট প্রফেশনাল লাগে */
+    color: #334155;
+    margin: 0;
+}
+
+.cat-text .subtitle { 
+    font-size: 11px; 
+    color: #94a3b8; /* সাবটাইটেল আরও হালকা করা হয়েছে */
+    margin-top: 2px;
+}
+
+/* Search Bar Section */
+.search-filter {
+    background: #fff;
+    padding: 10px;
+    margin: 30px 0 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    border: 1px solid var(--border);
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+}
+
+.input-group {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 15px;
+    border-right: 1px solid #f1f5f9;
+}
+
+.input-group i { color: var(--teal); font-size: 14px; }
+
+.input-group input, .input-group select {
+    border: none;
+    outline: none;
+    font-size: 13px;
+    color: #475569;
+}
+
+.btn-find {
+    background: var(--teal);
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-find:hover {
+    background: #007676;
+    box-shadow: 0 4px 12px rgba(0, 139, 139, 0.2);
+}
+
+/* Main Content Layout */
+.main-content {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 30px;
+}
+
+/* Sidebar Styling */
+.sidebar h3 { 
+    font-size: 14px; 
+    font-weight: 700;
+    margin: 25px 0 15px;
+    color: #1e293b;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sidebar label { 
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px; 
+    font-size: 13px; 
+    color: #64748b;
+    cursor: pointer;
+}
+
+
+
+
+
+
+/* ১. গ্রিড সেটিংস - গ্যাপ কমিয়ে ২ পিক্সেল করা হয়েছে */
+.job-list-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    grid-row-gap: 2px;      /* আপনার চাহিদা মতো ২ পিক্সেল গ্যাপ */
+    grid-column-gap: 20px; 
+    padding: 20px 0;
+    align-items: start;     /* এটি কার্ডকে অকারণে লম্বা হওয়া থেকে বাঁচাবে */
+}
+
+/* ২. কার্ড ডিজাইন - হালকা গ্রিনিশ ব্যাকগ্রাউন্ড */
+.job-card {
+    background: #f8faf7; 
+    padding: 16px 20px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    position: relative;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: auto;           /* কন্টেন্ট অনুযায়ী হাইট হবে */
+}
+
+/* ৩. হোভার ইফেক্ট */
+.job-card:hover {
+    background: #ffffff;
+    transform: translateY(-2px); 
+    border-color: #008b8b;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* ৪. হেডার - আইকন ও টাইটেল পাশাপাশি */
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+    padding-right: 60px;    /* ব্যাজের জন্য জায়গা রাখা হয়েছে */
+}
+
+/* ৫. আইকন বক্স - সবুজ বক্স ও সাদা আইকন */
+.job-icon-box {
+    width: 36px;
+    height: 36px;
+    background: #008b8b;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    flex-shrink: 0;
+    font-size: 16px;
+}
+
+/* ৬. টাইটেল ও ফন্ট এডজাস্টমেন্ট (আন্ডারলাইন সহ) */
+.info h4 {
+    font-size: 13px;
+    color: #1e293b;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.2;
+    text-decoration: underline;
+}
+
+.job-title {
+    font-size: 16px;
+    color: #008b8b;
+    font-weight: 700;
+    margin: 8px 0;
+    text-decoration: underline;
+}
+
+/* ৭. টাইম অ্যাগো - নীল কালার */
+.post-time {
+    color: #2563eb;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 5px;
+    text-decoration: underline;
+}
+/* 111 */
+.job-search-wrapper {
+  background: #1f3b63;
+  padding: 30px 15px;
+  text-align: center;
+  border-radius: 8px;
+}
+.job-search-wrapper h1 {
+  color: #fff;
+  letter-spacing: 4px;
+  font-size: 28px;
+  margin-bottom: 25px;
+}
+/* Search bar */
+.sssearch-bar {
+  display: flex;
+  max-width: 1100px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 10px;
+  gap: 10px;
+  border-radius: 4px;
+}
+.input-box-fd{
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  padding: 0 10px;
+  flex: 1;
+}
+
+.input-box-fd input {
+  border: none;
+  outline: none;
+  padding: 12px 8px;
+  width: 100%;
+  font-size: 15px;
+}
+/* personal */
+.info-fd h3 { margin: 0; font-size: 15px; color: #334155; }
+.input-box-fd.select-box{
+        display: flex;
+    align-items: center;
+}
+/* Responsive */
+.ccard-header {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.bbagge.ongoing {
+    background: #eef2ff;
+    color: #3730a3;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+}
+.iicon {
+    width: 56px;
+    height: 56px;
+    background: #14b8a6;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #fff;
+    margin: 0;
+}
+.ppprojects-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 15px;
+    row-gap: 15px;
+}
+.tttab {
+    padding: 8px 14px;
+    /* border-radius: 20px; */
+    cursor: pointer;
+    background: #e5e7eb;
+    font-size: 14px;
+}
+.iic {
+    color: #14b8a6;
+    /* width: 40px;
+    height: 40px; */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    /* color: #fff; */
+}
+.diist-select {
+    border: none;
+    padding: 12px;
+    font-size: 15px;
+    /* background: #eee; */
+    min-width: 160px;
+}
+.fndd-card {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0px 28px;
+}
+
+.fndd-btn{
+    background: #008b8b;
+    color: #fff;
+    border: none;
+    padding: 0 35px;
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    border-radius: 8px;
+}
+
+.botttom {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 4px;
+}
+.diist-select {
+  color: #988e8e;
+}
+.cccard-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 10px;
+    padding-right: 60px;
+}
+.lllocation {
+    color: #8a94a6;
+    font-size: 12px;
+    margin: 0px;
+    /* margin-top: 4px; */
+}
+.lllocation-sm{
+    color: #000;
+    font-size: 12px;
+    margin: 0px;
+}
+.ckard-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 0px;
+    padding-right: 0px;
+}
+
+.date-row-fd {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+  font-size: 13px;
+  color: #666;
+}
+.iicon img {
+  border-radius: 8px;
+  object-fit: cover;
+}
+.iicon {
+  width: 55px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-size: 20px;
+}
+
+/* default icon background */
+.iicon.with-bg {
+  background: #f1f3f5;
+}
+
+/* company image থাকলে */
+.iicon.no-bg {
+  background: transparent;
+  padding: 0;
+}
+
+.iicon.no-bg img {
+  border-radius: 8px;
+  object-fit: contain;
+}
+.fndd {
+    background: #fff;
+    padding: 10px 16px 10px 16px;
+    border-radius: 12px;
+    /* border-bottom: 6px solid #009299; */
+    box-shadow: 0 0 30px #50505014;
+    border: 1px solid #e2e8f0;
+}
+
+.fndd .top {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+}
+
+.fndd .title {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.fndd .desc {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.fndd-card {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0px 28px;
+    flex-direction: column;
+}

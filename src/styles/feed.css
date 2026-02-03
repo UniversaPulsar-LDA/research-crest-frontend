@@ -1,0 +1,260 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+}
+
+body {
+  background: #f5f7fb;
+  color: #111827;
+}
+
+/* ================= NAV ================= */
+.nav {
+  background: #fff;
+  height: 64px;
+  padding: 0 48px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.logo {
+  font-weight: 700;
+  color: #6b46ff;
+}
+
+.search {
+  flex: 1;
+}
+
+.search input {
+  width: 100%;
+  padding: 10px 18px;
+  border-radius: 22px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.menu a {
+  margin-left: 18px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* ================= PAGE LAYOUT ================= */
+.page {
+  display: grid;
+  grid-template-columns: 300px 1fr 320px;
+  gap: 32px; /* 🔥 MAIN SPACE FIX */
+  padding: 20px 20px;
+  align-items: flex-start;
+}
+
+/* ================= PROFILE CARD ================= */
+.profile-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 20px -14px rgba(0, 0, 0, 0.18);
+  /* box-shadow:0 18px 40px rgba(0,0,0,.08); */
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.profile-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.profile-stats div {
+  text-align: center;
+}
+
+.profile-stats strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.profile-section {
+  margin-bottom: 14px;
+}
+
+.green {
+  color: #16a34a;
+}
+
+/* ================= FEED ================= */
+.feed-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 24px; /* 🔥 FEED TO FEED SPACE */
+}
+
+.feed-header input {
+  flex: 1;
+  border: 1px solid #ddd;
+  border-radius: 22px;
+  font-size: 14px;
+  padding: 10px 18px;
+  outline: none;
+}
+
+.feed-actions span {
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.feed-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+
+.feed-actions-row {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 8px;
+}
+
+.feed-text {
+  font-size: 13px;
+  color: #374151;
+}
+
+/* ================= RIGHT SIDEBAR ================= */
+.right-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.side-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 16px;
+  /* box-shadow:0 18px 40px rgba(0,0,0,.08); */
+}
+
+.article {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.article img {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.article p {
+  font-size: 12px;
+  color: #374151;
+}
+
+/* ================= RIGHT BAR ================= */
+
+/* LEFT EXTRA COLUMN */
+.left-extra {
+  /* margin-top:24px; */
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* spacing from feed */
+.page {
+  display: grid;
+  grid-template-columns: 300px 1fr 320px;
+  gap: 20px;
+}
+
+.right-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 26px; /* ⬅️ card spacing fix */
+  width: 100%;
+}
+
+/* ================= COMMON CARD ================= */
+/* .side-card{
+  background:#ffffff;
+  border-radius:18px;
+  padding:18px 16px;
+  box-shadow:0 18px 40px rgba(0,0,0,.08);
+} */
+
+/* ================= TITLES ================= */
+.side-title {
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 16px; /* ⬅️ title gap fix */
+  color: #0f172a;
+}
+
+.side-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+/* ================= POST ACTIVITY ================= */
+.activity-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.activity-item img {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+}
+
+.activity-item b {
+  font-size: 12px;
+  color: #6b46ff;
+  font-weight: 600;
+}
+
+/* ================= NOTABLE ================= */
+.notable-row {
+  display: flex;
+  gap: 12px;
+}
+
+.notable-user {
+  background: #f9fafb;
+  border-radius: 14px;
+  padding: 12px 8px;
+  text-align: center;
+  flex: 1;
+}
+
+.notable-user img {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  margin-bottom: 6px;
+}
