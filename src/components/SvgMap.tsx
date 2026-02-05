@@ -25,7 +25,8 @@ export default function SvgMap() {
     {
       name: "Radoan Hossain",
       location: "Dhaka, Bangladesh<br/>Software Engineer<br/>",
-      coords: [90.4130, 23.8103],    },
+      coords: [90.4130, 23.8103],
+    },
     {
       name: "John Doe",
       location: "Evora, Portugal<br/>Professor<br/>University of Evora",
@@ -117,11 +118,36 @@ export default function SvgMap() {
       const primary = peopleData.find((p) => p.tag === "primary")!;
       const nonPrimary = peopleData.filter((p) => p.tag !== "primary");
 
+      // nonPrimary.forEach((p, index) => {
+      //   map.addSource(`line-${index}`, {
+      //     type: "geojson",
+      //     data: {
+      //       type: "Feature",
+      //       geometry: {
+      //         type: "LineString",
+      //         coordinates: [primary.coords, p.coords],
+      //       },
+      //     },
+      //   });
+
+      //   map.addLayer({
+      //     id: `line-layer-${index}`,
+      //     type: "line",
+      //     source: `line-${index}`,
+      //     paint: {
+      //       "line-color": "#000",
+      //       "line-width": 1,
+      //       "line-opacity": 0.6,
+      //     },
+      //   });
+      // });
+
       nonPrimary.forEach((p, index) => {
         map.addSource(`line-${index}`, {
           type: "geojson",
           data: {
             type: "Feature",
+            properties: {}, // ✅ এখানে properties add করলেই হবে
             geometry: {
               type: "LineString",
               coordinates: [primary.coords, p.coords],
@@ -140,7 +166,6 @@ export default function SvgMap() {
           },
         });
       });
-
       // -----------------------------
       // Primary popup (always visible)
       // -----------------------------

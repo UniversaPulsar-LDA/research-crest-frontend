@@ -5,8 +5,22 @@ import { RiReactjsFill } from "react-icons/ri";
 import { SiRstudioide } from "react-icons/si";
 import { RiFlutterFill } from "react-icons/ri";
 import { useState } from "react";
-import ProjectModal from "@/components/ProjectModal";
-const projectsData = [
+//import ProjectModal from "@/components/ProjectModal";
+import { IconType } from "react-icons";
+interface ProjectItem {
+  id: number;
+  title: string;
+  desc: string;
+  percent: number;
+  tech: string;
+  type: "Ongoing" | "Completed";
+  startDate: string;
+  barClass: string;
+  topIcon: string;
+  centerIcon: IconType;
+  theme: string;
+}
+const projectsData: ProjectItem[] = [
   {
     id: 1,
     title: "Next.Js Project",
@@ -98,8 +112,14 @@ const timelineData = [
   },
 ];
 
-const truncateText = (text, maxLength = 35) => {
-  return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+// const truncateText = (text, maxLength = 35) => {
+//   return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+// };
+
+const truncateText = (text: string, maxLength: number = 35): string => {
+  return text.length > maxLength
+    ? text.slice(0, maxLength) + "..."
+    : text;
 };
 
 export default function Projects() {
@@ -122,7 +142,7 @@ export default function Projects() {
     .map(Number)
     .sort((a, b) => a - b);
 
-  const renderProjectCard = (item) => (
+const renderProjectCard = (item: ProjectItem) => (
     <a
       key={item.id}
       href={`/projects/${item.id}`} // project details page
@@ -242,11 +262,11 @@ export default function Projects() {
           </div>
         </div>
       </section>
-      <ProjectModal
+      {/* <ProjectModal
         open={showUploadModal}
         project={activeProject}
         onClose={() => setShowUploadModal(false)}
-      />
+      /> */}
     </>
   );
 }

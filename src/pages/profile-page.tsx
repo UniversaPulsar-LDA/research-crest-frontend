@@ -128,7 +128,7 @@ export default function ProfilePage() {
           <input type="text" placeholder="Search In Tensor Crest" />
         </div>
         <nav className="feed-menu">
-           <a style={{ cursor: "pointer" }} onClick={() => router.push("/network-page")}>
+          <a style={{ cursor: "pointer" }} onClick={() => router.push("/network-page")}>
             Network</a>
           <a>Q&amp;A</a>
           <a>Career</a>
@@ -273,16 +273,16 @@ export default function ProfilePage() {
             {/* ===== RIGHT COLUMN ===== */}
             <div className="pfl-right">
               <aside className="pfl-card">
-              <div className="atr-row">
-                <div className="atr-wrap">
-                  <img src="/images/prof.jpg" />
-                </div>
-                <button 
-                className="btn-downldd"
-                onClick={() => setShowUploadModal(true)}
-                >
-                  Upload Resume
-                </button>
+                <div className="atr-row">
+                  <div className="atr-wrap">
+                    <img src="/images/prof.jpg" />
+                  </div>
+                  <button
+                    className="btn-downldd"
+                    onClick={() => setShowUploadModal(true)}
+                  >
+                    Upload Resume
+                  </button>
                 </div>
                 <div className="card-bttns">
                   <button className="btn-dark">
@@ -304,6 +304,42 @@ export default function ProfilePage() {
                   <div className="stat pad">
                     <p>h-index</p>
                     <h4>119</h4>
+                  </div>
+                </div>
+                <div className="citation-chart-wrap">
+                  <h4 className="chart-title">Citations per year</h4>
+                  <div className="citation-mini-chart">
+                    <div className="y-axis">
+                      <span>3400</span>
+                      <span>2550</span>
+                      <span>1700</span>
+                      <span>850</span>
+                      <span>0</span>
+                    </div>
+                    <div className="chart-bars">
+                      {[
+                        { year: "2019", value: 300 },
+                        { year: "2020", value: 2900 },
+                        { year: "2021", value: 3300 },
+                        { year: "2022", value: 2900 },
+                        { year: "2023", value: 2600 },
+                        { year: "2024", value: 2400 },
+                        { year: "2025", value: 2450 },
+                        { year: "2026", value: 200 },
+                      ].map((item, i) => (
+                        <div className="bar-col" key={i}>
+                          <div
+                            className="bar-ct"
+                            style={{ height: `${(item.value / 3400) * 100}%` }}
+                            // style={{
+                            //   height: `${Math.max((item.value / 3400) * 100, 2)}%`
+                            // }}
+                            title={`${item.value} citations`}
+                          />
+                          <span className="x-label">{item.year}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
                 <div className="card-grid">
@@ -522,10 +558,10 @@ export default function ProfilePage() {
         </div>
       </footer>
       <UploadPdfModal
-  open={showUploadModal}
-  onClose={() => setShowUploadModal(false)}
-/>
-<FloatingChatBox />
+        open={showUploadModal}
+        onClose={() => setShowUploadModal(false)}
+      />
+      <FloatingChatBox />
     </>
   );
 }

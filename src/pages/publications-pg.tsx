@@ -179,8 +179,14 @@ const timelineData = [
   },
 ];
 
-const truncateText = (text, maxLength = 35) => {
-  return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+// const truncateText = (text, maxLength = 35) => {
+//   return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+// };
+
+const truncateText = (text: string, maxLength: number = 35): string => {
+  return text.length > maxLength
+    ? text.slice(0, maxLength) + "..."
+    : text;
 };
 
 export default function ProfilePage() {

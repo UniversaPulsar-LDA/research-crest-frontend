@@ -1,0 +1,254 @@
+.filter-jb-card{
+    background: #fff;
+    /* padding: 0.5rem; */
+    border-radius: 10px;
+}
+
+.filter-jb-content {
+    display: grid;
+    align-items: flex-start;
+    grid-template-columns: 280px 1fr;
+    gap: 10px;
+}
+
+.simple-jb-item {
+  display: flex;
+  gap: 8px;
+  font-size: 13px;
+  margin-bottom: 6px;
+  cursor: pointer;
+}
+
+.job-jb-list-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-row-gap: 2px;
+    grid-column-gap: 10px;
+    padding: 0;
+    align-items: start;
+}
+
+.job-jb-list-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* each card takes exactly 50% width */
+.job-card-link {
+    width: calc(50% - 10px);
+    text-decoration: none;
+}
+
+/* card styling (safe) */
+.job-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 18px;
+    height: 100%;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+    transition: transform 0.2s ease;
+}
+
+.job-card:hover {
+    transform: translateY(-4px);
+}
+
+.filter-jb-header{
+    display: flex;
+    justify-content: space-between;
+}
+
+.jb-sidebar h3 {
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0;
+    color: #1e293b;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-find {
+    background: #008b8b;
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* container for all tags */
+.search-jb-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px; /* spacing between tags */
+    margin-top: 10px;
+}
+
+/* each tag box */
+.jb-tag {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    border: 1px solid #1D3661;
+    border-radius: 8px;
+    color: #1D3661;
+    font-size: 14px;
+    background-color: #fff;
+    margin-bottom: 5px;
+}
+
+/* close icon inside tag */
+.jb-tag-close {
+    cursor: pointer;
+    font-weight: bold;
+    padding-left: 4px;
+    color: #1D3661;
+    transition: color 0.2s ease;
+}
+
+.jb-tag-close:hover {
+    color: #ff4d4f; /* hover e red hobe */
+}
+
+.job-jb-title {
+    font-size: 20px;
+    color: #008b8b !important;
+    font-weight: 700;
+    margin: 0;
+}
+
+.iicon-jb {
+    width: auto;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-size: 20px;
+}
+
+.iicon-jb.no-bg {
+    background: transparent;
+    padding: 0;
+}
+
+.iicon-jb-img{
+    border-radius: 10px;
+}
+
+.lllocation-jb {
+    display: flex;
+    color: #000;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0px;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+}
+
+.lllocation-jb-sm {
+    color: #000;
+    font-size: 14px;
+    margin: 0px;    
+    display: flex;
+    gap: 5px;    
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.icon-jb-box {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    background: #e6f4f4;
+    color: #008b8b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 18px;
+}
+
+/* 333 */
+/* SIDEBAR */
+.jb-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* EACH FILTER CARD */
+.filter-jb-card {
+  border-radius: 10px;
+  overflow: hidden;
+  /* background: #008b8b; */
+}
+
+/* HEADER (CLICKABLE PART) */
+.filter-jb-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  cursor: pointer;
+  background: #008b8b;
+}
+
+/* HEADER TEXT */
+.filter-jb-header h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+}
+
+/* HEADER ICON */
+.filter-jb-header svg {
+  color: #fff;
+  font-size: 16px;
+}
+
+/* DROPDOWN CONTENT */
+.discipline-jb-list {
+  background: #ffffff; /* inside white */
+  padding: 12px 14px;
+}
+
+/* SIMPLE CHECK ITEMS */
+.simple-jb-item,
+.discipline-jb-main {
+  display: flex;
+  /* justify-content: space-between; */
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #1e293b;
+  padding: 6px 6px;
+  cursor: pointer;
+}
+
+/* INPUT ALIGNMENT */
+.simple-jb-item input,
+.discipline-jb-main input {
+  margin-right: 6px;
+}
+
+/* COUNT BADGE */
+.discipline-jb-main .count {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.view-all-wrap{
+    display: flex;
+    justify-content: center;
+    text-decoration: none;
+    margin-top: 5px;
+}

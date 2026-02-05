@@ -20,7 +20,12 @@ const labelRadius = 105;
 const cx = 150;
 const cy = 120;
 
-const polarToCartesian = (cx, cy, r, angle) => {
+const polarToCartesian = (
+  cx: number,
+  cy: number,
+  r: number,
+  angle: number
+) => {
   const rad = ((angle - 90) * Math.PI) / 180;
   return {
     x: cx + r * Math.cos(rad),
@@ -28,7 +33,13 @@ const polarToCartesian = (cx, cy, r, angle) => {
   };
 };
 
-const describeArc = (cx, cy, r, startAngle, endAngle) => {
+const describeArc = (
+  cx: number,
+  cy: number,
+  r: number,
+  startAngle: number,
+  endAngle: number
+): string => {
   const start = polarToCartesian(cx, cy, r, endAngle);
   const end = polarToCartesian(cx, cy, r, startAngle);
   const largeArcFlag = endAngle - startAngle > 180 ? 1 : 0;
@@ -51,25 +62,50 @@ export default function ResearchArea() {
     })
     .join(", ");
   let angle = 0;
-  useEffect(() => {
-    const tooltip = document.getElementById("pieTooltip");
+  // useEffect(() => {
+  //   const tooltip = document.getElementById("pieTooltip");
 
-    document.querySelectorAll(".pie-slice").forEach((slice) => {
-      slice.addEventListener("mousemove", (e) => {
-        tooltip.style.opacity = "1";
-        tooltip.style.left = e.offsetX + 15 + "px";
-        tooltip.style.top = e.offsetY + "px";
-        tooltip.innerHTML = `
-          <b>${slice.dataset.title}</b><br/>
-          ${slice.dataset.value}
-        `;
-      });
+  //   document.querySelectorAll(".pie-slice").forEach((slice) => {
+  //     slice.addEventListener("mousemove", (e) => {
+  //       tooltip.style.opacity = "1";
+  //       tooltip.style.left = e.offsetX + 15 + "px";
+  //       tooltip.style.top = e.offsetY + "px";
+  //       tooltip.innerHTML = `
+  //         <b>${slice.dataset.title}</b><br/>
+  //         ${slice.dataset.value}
+  //       `;
+  //     });
 
-      slice.addEventListener("mouseleave", () => {
-        tooltip.style.opacity = "0";
-      });
+  //     slice.addEventListener("mouseleave", () => {
+  //       tooltip.style.opacity = "0";
+  //     });
+  //   });
+  // }, []);
+  
+useEffect(() => {
+  const tooltip = document.getElementById("pieTooltip") as HTMLDivElement | null;
+  if (!tooltip) return;
+
+  document.querySelectorAll<SVGPathElement>(".pie-slice").forEach((slice) => {
+    slice.addEventListener("mousemove", (e) => {
+      const evt = e as MouseEvent;
+      const target = evt.currentTarget as HTMLElement;
+
+      tooltip.style.opacity = "1";
+      tooltip.style.left = evt.offsetX + 15 + "px";
+      tooltip.style.top = evt.offsetY + "px";
+      tooltip.innerHTML = `
+        <b>${target.dataset.title}</b><br/>
+        ${target.dataset.value}
+      `;
     });
-  }, []);
+
+    slice.addEventListener("mouseleave", () => {
+      tooltip.style.opacity = "0";
+    });
+  });
+}, []);
+
   return (
     <>
       {/* Research Area Section */}

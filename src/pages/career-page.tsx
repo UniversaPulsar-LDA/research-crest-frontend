@@ -1,4 +1,5 @@
-import { useState } from "react";
+"use client";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import Image from "next/image";
@@ -7,6 +8,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { FaLink, FaEnvelope } from "react-icons/fa";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { FaUserPlus } from "react-icons/fa6";
+import { FaUniversity } from "react-icons/fa";
+import { MdLocationOn } from "react-icons/md";
+import { TbCurrencyPound } from "react-icons/tb";
 import {
     IoIosArrowDown,
     IoMdNotificationsOutline,
@@ -17,6 +21,8 @@ import { MdOutlineMail, MdOutlineLocationOn } from "react-icons/md";
 import { FaFacebook, FaLinkedin } from "react-icons/fa";
 import { FaGoogleScholar } from "react-icons/fa6";
 import { SiScopus } from "react-icons/si";
+import { FiSearch } from "react-icons/fi";
+import { HiOutlineSquares2X2 } from "react-icons/hi2";
 /* ===== TAB COMPONENTS ===== */
 import Overview from "@/components/profile-tabs/Overview";
 import ResearchArea from "@/components/profile-tabs/ResearchArea";
@@ -27,6 +33,43 @@ import Awards from "@/components/profile-tabs/Awards";
 import Career from "@/components/profile-tabs/Career";
 import UploadPdfModal from "@/components/UploadPdfModal";
 import FloatingChatBox from "@/components/FloatingChatBox";
+import {
+    IoIosArrowUp,
+} from "react-icons/io";
+import { GiMoneyStack } from "react-icons/gi";
+import { FaMicroscope, FaLaptopCode, FaBullhorn, FaUserGraduate } from "react-icons/fa";
+import { MdOutlineSchool } from "react-icons/md";
+import { HiArrowRight } from "react-icons/hi";
+const dummyJobs = [
+    {
+        id: 1,
+        href: "#job-1",
+        theme: "light",
+        type: "Featured",
+        category: "Research",
+        company: "AI Lab UK",
+        companyImage: "",
+        title: "Junior Researcher",
+        location: "United Kingdom of Great Britain",
+        salaryRange: "$30k - $35k",
+        closes: "20 Feb 2026",
+        isExternal: false,
+    },
+    {
+        id: 2,
+        href: "#job-2",
+        theme: "dark",
+        type: "Urgent",
+        category: "AI Project",
+        company: "HealthTech",
+        companyImage: "/company-logo.png", // optional
+        title: "AI in Healthcare Project",
+        location: "London, UK",
+        salaryRange: "$40k - $50k",
+        closes: "28 Feb 2026",
+        isExternal: true,
+    },
+];
 /* ===== FONTS ===== */
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -88,6 +131,138 @@ const researcherData = [
     },
 ];
 
+const disciplineData = [
+    { title: "Agriculture, Food & Veterinary", count: 36 },
+    { title: "Architecture, Building & Planning", count: 40 },
+    { title: "Biological Sciences", count: 257 },
+    { title: "Business & Management Studies", count: 148 },
+    {
+        title: "Computer Sciences",
+        count: 342,
+        children: [
+            { title: "Artificial Intelligence", count: 186 },
+            { title: "Computer Science", count: 271 },
+            { title: "Cyber Security", count: 57 },
+        ],
+    },
+];
+
+const candidateLevelData = [
+    "Entry Level",
+    "Mid Level",
+    "Expert Level",
+];
+
+const experienceData = [
+    "Freshers",
+    "1 - 2 Years",
+    "2 - 4 Years",
+    "4 - 6 Years",
+    "6 - 8 Years",
+    "8 - 10 Years",
+    "10 - 15 Years",
+    "15+ Years",
+];
+
+const academicDisciplineData = [
+    { title: "Agriculture, Food & Veterinary", count: 5 },
+    { title: "Biological Sciences", count: 15 },
+    { title: "Business & Management Studies", count: 3 },
+    { title: "Computer Sciences", count: 8 },
+    { title: "Economics", count: 1 },
+    { title: "Engineering & Technology", count: 8 },
+    { title: "Health & Medical", count: 14 },
+    { title: "Law", count: 2 },
+    { title: "Mathematics & Statistics", count: 4 },
+    { title: "Physical & Environmental Sciences", count: 10 },
+    { title: "Psychology", count: 6 },
+    { title: "Social Sciences & Social Care", count: 6 },
+    { title: "Sport & Leisure", count: 2 },
+];
+
+const jobList = [
+    {
+        id: 1,
+        href: "#job-1",
+        badge: "Food",
+        title: "Junior Researcher",
+        institute: "Imperial College London",
+        location: "Devon, Exeter",
+        salary: "£33,000 to £35,000 plus benefits",
+        closesAt: "05 Mar 2026",
+        image: "/images/ppr/kul.png",
+    },
+    {
+        id: 2,
+        href: "#job-2",
+        badge: "Health",
+        title: "Postdoctoral Fellow - Moris Lab",
+        institute: "The Francis Crick Institute",
+        location: "Oxford, UK",
+        salary: "From £45,500 with benefits",
+        closesAt: "12 Mar 2026",
+        image: "/images/ppr/frcr.png",
+    },
+    {
+        id: 3,
+        href: "#job-3",
+        badge: "AI",
+        title: "AI Research Intern",
+        institute: "University College London",
+        location: "London, UK",
+        salary: "£1,500 / month",
+        closesAt: "20 Mar 2026",
+        image: "/images/ppr/kul.png",
+    },
+    {
+        id: 4,
+        href: "#job-4",
+        badge: "Data",
+        title: "Data Science Fellow",
+        institute: "King’s College London",
+        location: "London, UK",
+        salary: "£40,000 to £45,000",
+        closesAt: "28 Mar 2026",
+        image: "/images/ppr/kul.png",
+    },
+    {
+        id: 5,
+        href: "#job-5",
+        badge: "Biotech",
+        title: "Lab Research Officer",
+        institute: "University of Manchester",
+        location: "Manchester, UK",
+        salary: "£30,000 to £34,000",
+        closesAt: "02 Apr 2026",
+        image: "/images/ppr/kul.png",
+    },
+    {
+        id: 6,
+        href: "#job-6",
+        badge: "Physics",
+        title: "Postdoctoral Researcher",
+        institute: "University of Cambridge",
+        location: "Cambridge, UK",
+        salary: "£42,000 to £48,000",
+        closesAt: "10 Apr 2026",
+        image: "/images/ppr/kul.png",
+    },
+];
+
+const fundingData = [
+    { title: "PhDs", count: 14 },
+];
+
+const professionalServicesData = [
+    { title: "Fundraising, Alumni, Bids & Grants", count: 1 },
+    { title: "Hospitality, Retail, Conferences & Events", count: 16 },
+    { title: "Laboratory, Clinical & Technician", count: 2 },
+    { title: "PR, Marketing, Sales & Communication", count: 3 },
+    { title: "Project Management & Consulting", count: 2 },
+    { title: "Senior Management", count: 2 },
+    { title: "Student Services", count: 1 },
+];
+
 // ---------------- UTILITY (chunk array) ----------------
 const chunkArray = (arr: any[], size: number) => {
     const chunks = [];
@@ -99,10 +274,76 @@ const chunkArray = (arr: any[], size: number) => {
 
 const slides = chunkArray(researcherData, 2);
 
+const TAG_STORAGE_KEY = "career_search_tags";
+
 export default function CareerPage() {
     const router = useRouter();
     const [activeTab, setActiveTab] = useState("overview");
     const [showUploadModal, setShowUploadModal] = useState(false);
+    const [openDiscipline, setOpenDiscipline] = useState(true);
+    const [openSub, setOpenSub] = useState<string | null>(null);
+    const [keyword, setKeyword] = useState("");
+    const [location, setLocation] = useState("");
+    const [category, setCategory] = useState("");
+    //const [tags, setTags] = useState<string[]>([]);
+    const [openFilter, setOpenFilter] = useState<string | null>("candidate");
+    const [isClient, setIsClient] = useState(false);
+    const toggleFilter = (key: string) => {
+        setOpenFilter(prev => (prev === key ? null : key));
+    };
+    const [tags, setTags] = useState<string[]>(() => {
+        if (typeof window !== "undefined") {
+            const stored = localStorage.getItem(TAG_STORAGE_KEY);
+            return stored ? JSON.parse(stored) : [];
+        }
+        return [];
+    });
+
+    const handleFindJob = () => {
+        const newTags: string[] = [];
+        if (keyword.trim()) newTags.push(keyword.trim());
+        if (location.trim()) newTags.push(location.trim());
+        if (category.trim()) newTags.push(category.trim());
+
+        if (newTags.length === 0) return;
+
+        setTags(prev => {
+            const updatedTags = [...prev, ...newTags];
+            // localStorage update
+            localStorage.setItem(TAG_STORAGE_KEY, JSON.stringify(updatedTags));
+            return updatedTags;
+        });
+
+        setKeyword("");
+        setLocation("");
+        setCategory("");
+    };
+
+    const removeTag = (index: number) => {
+        setTags(prev => {
+            const updatedTags = prev.filter((_, i) => i !== index);
+            localStorage.setItem(TAG_STORAGE_KEY, JSON.stringify(updatedTags));
+            return updatedTags;
+        });
+    };
+
+    // useEffect(() => {
+    //   setIsClient(true);
+    // }, []);
+
+    useEffect(() => {
+        setIsClient(true);
+        const stored = localStorage.getItem(TAG_STORAGE_KEY);
+        if (stored) {
+            setTags(JSON.parse(stored));
+        }
+    }, []);
+    
+    useEffect(() => {
+        localStorage.setItem(TAG_STORAGE_KEY, JSON.stringify(tags));
+    }, [tags]);
+
+    if (!isClient) return null;
 
     return (
         <>
@@ -131,7 +372,7 @@ export default function CareerPage() {
                     <a>Career</a>
                     <a>Q&amp;A</a>
                     <a style={{ cursor: "pointer" }} onClick={() => router.push("/network-page")}>
-                    Network</a>
+                        Network</a>
                     <a>Scholarship</a>
                     <a>En</a>
                     <a className="nine-dots">
@@ -171,51 +412,125 @@ export default function CareerPage() {
                             <section className="popular-categories">
                                 <div className="section-header">
                                     <h2>Popular category That matches your criteria</h2>
-                                    <a href="#" className="view-all">
-                                        View All →
-                                    </a>
                                 </div>
                                 <div className="category-grid">
                                     <div className="cat-item active">
-                                        <div className="icon-box">🔬</div>
+                                        <div className="icon-jb-box">
+                                            <FaMicroscope />
+                                        </div>
                                         <div className="cat-text">
                                             <p className="title">Research Assistant (RA)</p>
                                             <p className="subtitle">267 Open position</p>
                                         </div>
                                     </div>
                                     <div className="cat-item">
-                                        <div className="icon-box">💻</div>
+                                        <div className="icon-jb-box">
+                                            <FaLaptopCode />
+                                        </div>
                                         <div className="cat-text">
                                             <p className="title">Junior Researcher</p>
                                             <p className="subtitle">312 Open position</p>
                                         </div>
                                     </div>
                                     <div className="cat-item">
-                                        <div className="icon-box">📢</div>
+                                        <div className="icon-jb-box">
+                                            <FaBullhorn />
+                                        </div>
                                         <div className="cat-text">
                                             <p className="title">Senior Researcher</p>
                                             <p className="subtitle">297 Open position</p>
                                         </div>
                                     </div>
+
+                                    <div className="cat-item">
+                                        <div className="icon-jb-box">
+                                            <FaUserGraduate />
+                                        </div>
+                                        <div className="cat-text">
+                                            <p className="title">Project Intern</p>
+                                            <p className="subtitle">247 Open position</p>
+                                        </div>
+                                    </div>
+                                    <div className="cat-item">
+                                        <div className="icon-jb-box">
+                                            <MdOutlineSchool />
+                                        </div>
+                                        <div className="cat-text">
+                                            <p className="title">Thesis / Dissertation Assistant</p>
+                                            <p className="subtitle">247 Open position</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="cat-item">
+                                        <div className="icon-jb-box">
+                                            <FaUserGraduate />
+                                        </div>
+                                        <div className="cat-text">
+                                            <p className="title">Postdoctoral Researcher</p>
+                                            <p className="subtitle">167 Open position</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="cat-item">
+                                        <div className="icon-jb-box">
+                                            <FaBullhorn />
+                                        </div>
+                                        <div className="cat-text">
+                                            <p className="title">Co-Researcher Collaborator</p>
+                                            <p className="subtitle">167 Open position</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="cat-item">
+                                        <div className="icon-jb-box">
+                                            <FaBullhorn />
+                                        </div>
+                                        <div className="cat-text">
+                                            <p className="title">Co-Researcher Collaborator</p>
+                                            <p className="subtitle">167 Open position</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* View All moved below grid */}
+                                <div className="view-all-wrap">
+                                    <a href="#" className="view-all">
+                                        View All <HiArrowRight />
+                                    </a>
                                 </div>
                             </section>
                             {/* ===== Search Filter ===== */}
-                            <section className="search-filter">
+                            <section className="search-jb-filter">
                                 <div className="search-box">
+                                    {/* INPUT ROW */}
                                     <div className="input-group">
-                                        🔍
-                                        <input type="text" placeholder="Job title, Keyword..." />
+                                        <FiSearch className="iic" />
+                                        <input
+                                            type="text"
+                                            placeholder="Job title, Keyword..."
+                                            value={keyword}
+                                            onChange={(e) => setKeyword(e.target.value)}
+                                        />
                                     </div>
 
                                     <div className="input-group">
-                                        📍
-                                        <input type="text" placeholder="Location" />
+                                        <MdLocationOn className="iic" />
+                                        <input
+                                            type="text"
+                                            placeholder="Location"
+                                            value={location}
+                                            onChange={(e) => setLocation(e.target.value)}
+                                        />
                                     </div>
 
                                     <div className="input-group">
-                                        🧩
-                                        <select className="category-select">
-                                            <option value="" disabled selected hidden>
+                                        <HiOutlineSquares2X2 className="iic" />
+                                        <select
+                                            className="category-select"
+                                            value={category}
+                                            onChange={(e) => setCategory(e.target.value)}
+                                        >
+                                            <option value="" disabled hidden>
                                                 Select Category
                                             </option>
                                             <option>Computer Science</option>
@@ -224,150 +539,166 @@ export default function CareerPage() {
                                             <option>Health & Medical</option>
                                         </select>
                                     </div>
-                                    <button className="btn-find">Find Job</button>
+
+                                    <button className="btn-find" onClick={handleFindJob}>
+                                        Find Job
+                                    </button>
                                 </div>
                             </section>
-                            <div className="main-content">
-                                <aside className="sidebar">
-                                    <div className="filter-card">
-                                        <div className="filter-header">
-                                            <h3>Location Radius: <span>32 miles</span></h3>
-                                            <i className="fas fa-chevron-up"></i>
-                                        </div>
-                                        <input type="range" className="range-slider" value="32" />
-
-                                        <div className="filter-header">
+                            {/* TAG RESULT */}
+                            {tags.length > 0 && (
+                                <div className="search-jb-tags">
+                                    {tags.map((tag, index) => (
+                                        <span key={index} className="jb-tag">
+                                            {tag}
+                                            <span
+                                                className="jb-tag-close"
+                                                onClick={() => removeTag(index)}
+                                            >
+                                                ×
+                                            </span>
+                                        </span>
+                                    ))}
+                                </div>
+                            )}
+                            <div className="filter-jb-content">
+                                <aside className="jb-sidebar">
+                                    {/* Candidate Level */}
+                                    <div className="filter-jb-card">
+                                        <div className="filter-jb-header clickable" onClick={() => toggleFilter("candidate")}>
                                             <h3>Candidate Level</h3>
-                                            <i className="fas fa-chevron-up"></i>
+                                            {openFilter === "candidate" ? <IoIosArrowUp /> : <IoIosArrowDown />}
                                         </div>
-                                        <label><input type="radio" name="level" /> Entry Level</label>
-                                        <label><input type="radio" name="level" checked /> Mid Level</label>
-                                        <label><input type="radio" name="level" /> Expert Level</label>
-
-                                        <div className="filter-header">
+                                        {openFilter === "candidate" && (
+                                            <div className="discipline-list">
+                                                {candidateLevelData.map((item, i) => (
+                                                    <label className="simple-jb-item" key={i}>
+                                                        <input type="checkbox" /> {item}
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                    {/* Experience */}
+                                    <div className="filter-jb-card">
+                                        <div className="filter-jb-header clickable" onClick={() => toggleFilter("experience")}>
                                             <h3>Experiences</h3>
-                                            <i className="fas fa-chevron-up"></i>
+                                            {openFilter === "experience" ? <IoIosArrowUp /> : <IoIosArrowDown />}
                                         </div>
-                                        <label><input type="radio" /> Freshers</label>
-                                        <label><input type="radio" /> 1 - 2 Years</label>
-                                        <label><input type="radio" /> 2 - 4 Years</label>
-                                        <label><input type="radio" checked /> 4 - 6 Years</label>
-                                        <label><input type="radio" /> 6 - 8 Years</label>
-                                        <label><input type="radio" /> 8 - 10 Years</label>
-                                        <label><input type="radio" /> 10 - 15 Years</label>
-                                        <label><input type="radio" /> 15+ Years</label>
+                                        {openFilter === "experience" && (
+                                            <div className="discipline-list">
+                                                {experienceData.map((item, i) => (
+                                                    <label className="simple-jb-item" key={i}>
+                                                        <input type="checkbox" /> {item}
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                    {/* Academic Discipline */}
+                                    <div className="filter-jb-card">
+                                        <div className="filter-jb-header clickable" onClick={() => toggleFilter("academic")}>
+                                            <h3>Academic Discipline / Field of Expertise</h3>
+                                            {openFilter === "academic" ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                                        </div>
+                                        {openFilter === "academic" && (
+                                            <div className="discipline-list">
+                                                {academicDisciplineData.map((item, i) => (
+                                                    <label className="discipline-jb-main" key={i}>
+                                                        <span>
+                                                            <input type="checkbox" /> {item.title}
+                                                        </span>
+                                                        <span className="count">{item.count}</span>
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                    {/* PhD & Funding */}
+                                    <div className="filter-jb-card">
+                                        <div className="filter-jb-header clickable" onClick={() => toggleFilter("funding")}>
+                                            <h3>PhD & Master’s Studentships and Funding</h3>
+                                            {openFilter === "funding" ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                                        </div>
+                                        {openFilter === "funding" && (
+                                            <div className="discipline-list">
+                                                {fundingData.map((item, i) => (
+                                                    <label className="discipline-jb-main" key={i}>
+                                                        <span>
+                                                            <input type="checkbox" /> {item.title}
+                                                        </span>
+                                                        <span className="count">{item.count}</span>
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                    {/* Professional Services */}
+                                    <div className="filter-jb-card">
+                                        <div className="filter-jb-header clickable" onClick={() => toggleFilter("services")}>
+                                            <h3>Professional Services</h3>
+                                            {openFilter === "services" ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                                        </div>
 
-                                        <div className="filter-header">
-                                            <h3>Education</h3>
-                                            <i className="fas fa-chevron-up"></i>
-                                        </div>
-                                        <label><input type="checkbox" /> All</label>
-                                        <label><input type="checkbox" /> High School</label>
-                                        <label><input type="checkbox" /> Intermediate</label>
-                                        <label><input type="checkbox" checked /> Graduation</label>
-                                        <label><input type="checkbox" /> Master Degree</label>
-                                        <label><input type="checkbox" /> Bachelor Degree</label>
-
-                                        <div className="filter-header">
-                                            <h3>Gender</h3>
-                                            <i className="fas fa-chevron-up"></i>
-                                        </div>
-                                        <label><input type="radio" name="gender" checked /> Male</label>
-                                        <label><input type="radio" name="gender" /> Female</label>
-                                        <label><input type="radio" name="gender" /> Others</label>
+                                        {openFilter === "services" && (
+                                            <div className="discipline-jb-list">
+                                                {professionalServicesData.map((item, i) => (
+                                                    <label className="discipline-jb-main" key={i}>
+                                                        <span>
+                                                            <input type="checkbox" /> {item.title}
+                                                        </span>
+                                                        <span className="count">{item.count}</span>
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        )}
                                     </div>
                                 </aside>
-                                <div className="job-list-grid">
-                                    <a href="#job-1" className="job-card-link">
-                                        <div className="job-card">
-                                            <span className="badge">Featured</span>
-                                            <div className="card-header">
-                                                <div className="job-icon-box"><i className="fas fa-code"></i></div>
-                                                <div className="info">
-                                                    <h4>Dr. A. Rahman - AI in Healthcare Project</h4>
-                                                    <p><i className="fas fa-map-marker-alt"></i> United Kingdom of Great Britain</p>
+                                <div className="job-jb-list-grid">
+                                    {jobList.map((job) => (
+                                        <a key={job.id} href={job.href} className="job-card-link">
+                                            <div className="job-card">
+                                                <div className="botttom">
+                                                    <span className="bbagge ongoing">{job.badge}</span>
+                                                </div>
+
+                                                <div className="ckard-header">
+                                                    <div className="iicon-jb no-bg">
+                                                        <Image
+                                                            src={job.image}
+                                                            alt={job.title}
+                                                            width={80}
+                                                            height={80}
+                                                            className="iicon-jb-img"
+                                                        />
+                                                    </div>
+                                                    <div className="info-fd">
+                                                        <h2 className="job-jb-title">{job.title}</h2>
+                                                        <p className="lllocation-jb">
+                                                            <FaUniversity className="jb-icon" />
+                                                            {job.institute}
+                                                        </p>
+                                                        <p className="lllocation-jb-sm">
+                                                            <MdLocationOn className="jb-icon" />
+                                                            {job.location}
+                                                        </p>
+
+                                                        <p className="lllocation-jb-sm">
+                                                            <GiMoneyStack className="jb-icon" />
+                                                            {job.salary}
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                <div className="date-row-fd">
+                                                    <span></span>
+                                                    <span>
+                                                        <strong>Closes At:</strong> {job.closesAt}
+                                                    </span>
                                                 </div>
                                             </div>
-                                            <h2 className="job-title">Junior researcher</h2>
-                                            <div className="job-meta">
-                                                <span className="post-time"><i className="far fa-clock"></i> 2 days ago</span>
-                                            </div>
-                                            <p className="job-footer">Full Time • $30k-$35k</p>
-                                        </div>
-                                    </a>
-
-                                    <a href="#job-2" className="job-card-link">
-                                        <div className="job-card">
-                                            <span className="badge">Featured</span>
-                                            <div className="card-header">
-                                                <div className="job-icon-box"><i className="fas fa-book"></i></div>
-                                                <div className="info">
-                                                    <h4>Prof. M. Rahman - Impact Assessment Study</h4>
-                                                    <p><i className="fas fa-map-marker-alt"></i> United Kingdom</p>
-                                                </div>
-                                            </div>
-                                            <h2 className="job-title">Thesis / Dissertation Assistant</h2>
-                                            <div className="job-meta">
-                                                <span className="post-time"><i className="far fa-clock"></i> 1 day ago</span>
-                                            </div>
-                                            <p className="job-footer">Full Time • $30k-$35k</p>
-                                        </div>
-                                    </a>
-
-                                    <a href="#job-3" className="job-card-link">
-                                        <div className="job-card">
-                                            <span className="badge">Featured</span>
-                                            <div className="card-header">
-                                                <div className="job-icon-box"><i className="fas fa-pen-nib"></i></div>
-                                                <div className="info">
-                                                    <h4>Dr. N. Islam - Legal Research Project</h4>
-                                                    <p><i className="fas fa-map-marker-alt"></i> United Kingdom of Great Britain</p>
-                                                </div>
-                                            </div>
-                                            <h2 className="job-title">Thesis Writer</h2>
-                                            <div className="job-meta">
-                                                <span className="post-time"><i className="far fa-clock"></i> 3 days ago</span>
-                                            </div>
-                                            <p className="job-footer">Full Time • $30k-$35k</p>
-                                        </div>
-                                    </a>
-
-                                    <a href="#job-4" className="job-card-link">
-                                        <div className="job-card">
-                                            <span className="badge">Featured</span>
-                                            <div className="card-header">
-                                                <div className="job-icon-box"><i className="fas fa-user-tie"></i></div>
-                                                <div className="info">
-                                                    <h4>Dr. A. Hossain - AI in Data science Project</h4>
-                                                    <p><i className="fas fa-map-marker-alt"></i> United Kingdom of Great Britain</p>
-                                                </div>
-                                            </div>
-                                            <h2 className="job-title">Co- Ordinator</h2>
-                                            <div className="job-meta">
-                                                <span className="post-time"><i className="far fa-clock"></i> 5 hours ago</span>
-                                            </div>
-                                            <p className="job-footer">Full Time • $30k-$35k</p>
-                                        </div>
-                                    </a>
-
-                                    <a href="#job-5" className="job-card-link">
-                                        <div className="job-card">
-                                            <span className="badge">Featured</span>
-                                            <div className="card-header">
-                                                <div className="job-icon-box"><i className="fas fa-hand-holding-heart"></i></div>
-                                                <div className="info">
-                                                    <h4>Dr Mridha - Reserch Project</h4>
-                                                    <p><i className="fas fa-map-marker-alt"></i> United Kingdom of Great Britain</p>
-                                                </div>
-                                            </div>
-                                            <h2 className="job-title">Student Volunteer</h2>
-                                            <div className="job-meta">
-                                                <span className="post-time"><i className="far fa-clock"></i> 1 week ago</span>
-                                            </div>
-                                            <p className="job-footer">Full Time • $30k-$35k</p>
-                                        </div>
-                                    </a>
-
+                                        </a>
+                                    ))}
                                 </div>
                             </div>
                         </div>
@@ -403,7 +734,6 @@ export default function CareerPage() {
                             <a href="#">Privacy Policy</a>
                             <a href="#">T&amp;C</a>
                         </div>
-
                         <div className="footer-col">
                             <h4>Social</h4>
                             <a href="#">Facebook</a>

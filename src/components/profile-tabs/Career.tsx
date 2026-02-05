@@ -15,6 +15,19 @@ import { IoLocationSharp } from "react-icons/io5";
 import { IoLayersSharp } from "react-icons/io5";
 import { FaSearch } from "react-icons/fa";
 import { BiCategory } from "react-icons/bi";
+interface ProjectItem {
+  id: number;
+  title: string;
+  location: string;
+  salaryRange?: string;
+  closes?: string;
+  outboundLink?: string;
+  companyImage?: string;
+  category?: string;
+  type: string;
+  startDate: string;
+  theme: string;
+}
 const projectsData = [
   {
     id: 1,
@@ -195,8 +208,14 @@ const careerData = [
   // },
 ];
 
-const truncateText = (text, maxLength = 35) => {
-  return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+// const truncateText = (text, maxLength = 35) => {
+//   return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+// };
+
+const truncateText = (text: string, maxLength: number = 35): string => {
+  return text.length > maxLength
+    ? text.slice(0, maxLength) + "..."
+    : text;
 };
 
 const groupedPublications = awards.reduce((acc: any, item) => {
@@ -214,13 +233,11 @@ const ongoingProjects = projectsData.filter((p) => p.type === "Ongoing");
 const completedProjects = projectsData.filter((p) => p.type === "Completed");
 
 const allProjects = [...ongoingProjects, ...completedProjects];
-const renderProjectCard = (item) => {
+const renderProjectCard = (item: ProjectItem) => {
   const href = item.outboundLink
     ? item.outboundLink
     : `/projects/${item.id}`;
-
   const isExternal = Boolean(item.outboundLink);
-
   return (
     <a
       key={item.id}
@@ -238,7 +255,7 @@ const renderProjectCard = (item) => {
           {item.companyImage ? (
             <Image
               src={item.companyImage}
-              alt={item.company}
+              alt={item.title}
               width={55}
               height={55}
             />
@@ -293,7 +310,7 @@ export default function Career() {
             <div className="sssearch-bar">
               <div className="input-box-fd">
                 <FaSearch className="iic" />
-                <input type="text" placeholder="Search jobs" />
+                <input type="text" placeholder="Job" />
               </div>
               <div className="input-box-fd">
                 <IoLocationSharp className="iic" />
@@ -322,14 +339,14 @@ export default function Career() {
               )
               .map(renderProjectCard)}
           </div>
-          <h5 className="stt-title">Fundings</h5>
+          {/* <h5 className="stt-title">Fundings</h5>
           <div className="projects-grid">
             {completedProjects
               .filter(
                 (p) => selectedYear === "All" || new Date(p.startDate).getFullYear() === Number(selectedYear)
               )
               .map(renderProjectCard)}
-          </div>
+          </div> */}
         </div>
       </section>
       <section className="tmln-card">
