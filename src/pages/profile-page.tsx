@@ -269,7 +269,6 @@ export default function ProfilePage() {
                 {PROFILE_TABS.find((tab) => tab.key === activeTab)?.component}
               </section>
             </div>
-
             {/* ===== RIGHT COLUMN ===== */}
             <div className="pfl-right">
               <aside className="pfl-card">
