@@ -10,6 +10,7 @@ import "@/styles/paper.css";
 import "@/styles/chatbot.css";
 import "@/styles/career.css";
 import "@/styles/career-pg.css";
+import "@/styles/network.css";
 // import "@/styles/home.css";
 // import "@/styles/research.css";
 import type { AppProps } from "next/app";

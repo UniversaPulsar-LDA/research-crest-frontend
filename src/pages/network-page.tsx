@@ -1,531 +1,539 @@
-import { useState } from "react";
-import { useRouter } from "next/router";
 import Head from "next/head";
 import Image from "next/image";
-import { Carousel } from "react-bootstrap";
-import { Geist, Geist_Mono } from "next/font/google";
-import { FaLink, FaEnvelope } from "react-icons/fa";
-import { HiOutlineDotsHorizontal } from "react-icons/hi";
-import { FaUserPlus } from "react-icons/fa6";
+import React, { useRef, useState } from 'react';
 import {
-    IoIosArrowDown,
-    IoMdNotificationsOutline,
-    IoMdSearch,
-} from "react-icons/io";
-import { TbGridDots } from "react-icons/tb";
-import { MdOutlineMail, MdOutlineLocationOn } from "react-icons/md";
-import { FaFacebook, FaLinkedin } from "react-icons/fa";
-import { FaGoogleScholar } from "react-icons/fa6";
-import { SiScopus } from "react-icons/si";
-/* ===== TAB COMPONENTS ===== */
-import Overview from "@/components/profile-tabs/Overview";
-import ResearchArea from "@/components/profile-tabs/ResearchArea";
-import Publications from "@/components/profile-tabs/Publications";
-import Network from "@/components/profile-tabs/Network";
-import Projects from "@/components/profile-tabs/Projects";
-import Awards from "@/components/profile-tabs/Awards";
-import Career from "@/components/profile-tabs/Career";
-import UploadPdfModal from "@/components/UploadPdfModal";
-import FloatingChatBox from "@/components/FloatingChatBox";
-/* ===== FONTS ===== */
-const geistSans = Geist({
-    variable: "--font-geist-sans",
-    subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-    variable: "--font-geist-mono",
-    subsets: ["latin"],
-});
-
-/* ===== TAB CONFIG ===== */
-const PROFILE_TABS = [
-    { key: "overview", label: "Overview", component: <Overview /> },
-    { key: "research", label: "Research Area", component: <ResearchArea /> },
-    { key: "publications", label: "Publications", component: <Publications /> },
-    { key: "network", label: "Network", component: <Network /> },
-    { key: "projects", label: "Projects", component: <Projects /> },
-    { key: "awards", label: "Awards", component: <Awards /> },
-    { key: "career", label: "Career", component: <Career /> },
-];
-
-const researcherData = [
-    {
-        name: "Licorla Bond",
-        role: "Lecturer",
-        img: "https://randomuser.me/api/portraits/women/34.jpg",
-        link: "/researcher/licorla",
-    },
-    {
-        name: "Yousf Amari",
-        role: "Professor",
-        img: "https://randomuser.me/api/portraits/women/33.jpg",
-        link: "/researcher/yousf",
-    },
-    {
-        name: "Emma Roy",
-        role: "Scientist",
-        img: "https://randomuser.me/api/portraits/women/65.jpg",
-        link: "/researcher/emma",
-    },
-    {
-        name: "John Miller",
-        role: "Researcher",
-        img: "https://randomuser.me/api/portraits/men/45.jpg",
-        link: "/researcher/john",
-    },
-    {
-        name: "Olla Watson",
-        role: "Scientist",
-        img: "https://randomuser.me/api/portraits/women/65.jpg",
-        link: "/researcher/emma",
-    },
-    {
-        name: "Ron Miller",
-        role: "Researcher",
-        img: "https://randomuser.me/api/portraits/men/45.jpg",
-        link: "/researcher/john",
-    },
-];
-
-// ---------------- UTILITY (chunk array) ----------------
-const chunkArray = (arr: any[], size: number) => {
-    const chunks = [];
-    for (let i = 0; i < arr.length; i += size) {
-        chunks.push(arr.slice(i, i + size));
+    TbChevronLeft, TbChevronRight, TbFileText,
+    TbDownload, TbStarFilled, TbSearch,
+    TbBell, TbGridDots, TbUserCircle, TbSend, TbArrowLeft, TbCalendar
+} from "react-icons/tb";
+import { useRouter } from "next/router";
+const NetworkPage = () => {
+      const router = useRouter();
+    const [selectedPub, setSelectedPub] = useState<any>(null);
+    const topRef = useRef<HTMLDivElement>(null);
+    const nextRef = useRef<HTMLDivElement>(null);
+    const [open, setOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+  
+    const scroll = (ref: React.RefObject<HTMLDivElement>, direction: 'left' | 'right') => {
+        if (ref.current) {
+            const scrollAmount = 300;
+            ref.current.scrollBy({
+                left: direction === 'left' ? -scrollAmount : scrollAmount,
+                behavior: 'smooth'
+            });
+        }
     }
-    return chunks;
-};
+    // --- এইখানে ডেটা অ্যারেটি যোগ করুন ---
+    const researchers = [
+        { id: 1, name: "Dr. Alex Rahman", score: "95%", img: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=200&h=200&auto=format&fit=crop" },
+        { id: 2, name: "Dr. Sarah J.", score: "92%", img: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?q=80&w=200&h=200&auto=format&fit=crop" },
+        { id: 3, name: "Prof. Saiful Islam", score: "88%", img: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=200&h=200&auto=format&fit=crop" },
+        { id: 4, name: "Dr. Emily Chen", score: "85%", img: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=200&h=200&auto=format&fit=crop" },
+        { id: 5, name: "Michael Vance", score: "82%", img: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200&h=200&auto=format&fit=crop" },
+        { id: 6, name: "Dr. Lisa Ray", score: "80%", img: "https://images.unsplash.com/photo-1527613426441-4da17471b66d?q=80&w=200&h=200&auto=format&fit=crop" },
+        { id: 7, name: "Farzana Akter", score: "78%", img: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=200&h=200&auto=format&fit=crop" },
+    ];
 
-const slides = chunkArray(researcherData, 2);
+    // ১. পাবলিকেশন ডেটা অবজেক্ট (এখানে আরও প্রফেশনাল ডেটা অ্যাড করা হয়েছে)
+    const publications = [
+        {
+            id: 1,
+            title: "AI-driven traffic prediction using deep learning for smart cities",
+            authors: "Rahim Uddin • Farzana Akter",
+            fullAuthors: ["Rahim Uddin", "Farzana Akter", "Dr. Saiful Islam"],
+            citations: 25,
+            downloads: "1.5K",
+            date: "Feb 2026",
+            journal: "IEEE Smart Cities Journal",
+            doi: "10.1109/TSC.2026.123456",
+            keywords: ["Deep Learning", "Smart City", "LSTM", "Traffic Management"],
+            description: "A novel deep learning approach using LSTM networks for real-time urban traffic flow prediction in dense smart city environments. This research focuses on the optimization of traffic signals to reduce congestion by 20% using predictive modeling."
+        },
 
-export default function NetworkPage() {
-    const router = useRouter();
-    const [activeTab, setActiveTab] = useState("overview");
-    const [showUploadModal, setShowUploadModal] = useState(false);
 
+        {
+            id: 2,
+            title: "Quantum Computing Applications in Modern Healthcare Systems",
+            authors: "Dr. Sarah J. • Alex Rahman",
+            fullAuthors: ["Dr. Sarah J.", "Alex Rahman", "Michael Chen"],
+            citations: 42,
+            downloads: "2.1K",
+            date: "Jan 2026",
+            journal: "Medical Tech Review",
+            keywords: ["Quantum", "Healthcare", "Data Security"],
+            description: "Exploring how quantum algorithms can accelerate drug discovery beyond classical limits."
+        },
+        {
+            id: 3,
+            title: "Blockchain Frameworks for Supply Chain Transparency",
+            authors: "Saiful Islam • Rahim Uddin",
+            fullAuthors: ["Saiful Islam", "Rahim Uddin"],
+            citations: 18,
+            downloads: "900",
+            date: "Dec 2025",
+            journal: "Supply Chain Quarterly",
+            keywords: ["Blockchain", "Logistics", "IoT"],
+            description: "A study on implementing private blockchain networks to track product lifecycles."
+        }
+        // আরও ডেটা থাকলে এখানে যোগ হবে
+    ];
+
+    // ২. ডিটেইল ভিউ হ্যান্ডলার (ক্লিক করলে পেজের একদম উপরে নিয়ে যাবে)
+    const handleViewDetails = (pub: any) => {
+        setSelectedPub(pub);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    // ৩. প্রফেশনাল ডিটেইল ভিউ রিটার্ন (যদি selectedPub থাকে)
+    if (selectedPub) {
+        return (
+            <div className="net-wrapper">
+                {/* আপনি চাইলে এখানেও নেভবারটি রাখতে পারেন যাতে পেজটি খালি না লাগে */}
+                <div className="professional-detail-container">
+                    <div className="detail-header">
+                        <button className="back-btn-modern" onClick={() => setSelectedPub(null)}>
+                            <TbArrowLeft /> Back to Research Network
+                        </button>
+                        <div className="header-actions">
+                            <button className="action-icon-btn"><TbSend /> Share</button>
+                            <button className="action-icon-btn"><TbStarFilled color="#f59e0b" /> Save</button>
+                        </div>
+                    </div>
+
+                    <div className="detail-grid">
+                        {/* মেইন কন্টেন্ট এলাকা */}
+                        <div className="main-info">
+                            <div className="pub-badge">Academic Publication</div>
+                            <h1 className="modern-title">{selectedPub.title}</h1>
+
+                            <div className="author-tags">
+                                {selectedPub.fullAuthors?.map((author: string, index: number) => (
+                                    <span key={index} className="author-name">{author}</span>
+                                ))}
+                            </div>
+
+                            <div className="meta-info-strip">
+                                <span><TbCalendar /> {selectedPub.date}</span>
+                                <span><TbFileText /> {selectedPub.journal}</span>
+                            </div>
+
+                            <div className="abstract-card">
+                                <h3>Abstract / Description</h3>
+                                <p>{selectedPub.description}</p>
+                            </div>
+
+
+                            {/* ডিটেইল পেজে অনেকগুলো ছবির সেকশন */}
+                            <div className="detail-figure-gallery" style={{ marginTop: '25px' }}>
+                                <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '15px', color: '#1a202c' }}>
+                                    Research Figures & Data Visualization
+                                </h3>
+
+                                <div style={{
+                                    display: 'grid',
+                                    gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+                                    gap: '15px'
+                                }}>
+                                    {[
+                                        "https://pub.mdpi-res.com/sensors/sensors-19-03513/article_deploy/html/images/sensors-19-03513-g001.png",
+                                        "/images/ccc.png",
+                                        "/images/bbb.png",
+
+                                    ].map((imgUrl, idx) => (
+                                        <div key={idx} style={{
+                                            border: '1px solid #e2e8f0',
+                                            borderRadius: '8px',
+                                            overflow: 'hidden',
+                                            background: '#fff',
+                                            padding: '10px'
+                                        }}>
+                                            <img
+                                                src={imgUrl}
+                                                alt={`Figure ${idx + 1}`}
+                                                style={{ width: '100%', height: '160px', objectFit: 'contain' }}
+                                                onError={(e) => { e.currentTarget.src = "https://placehold.jp/18/f1f5f9/64748b/300x200.png?text=Figure"; }}
+                                            />
+                                            <p style={{ fontSize: '11px', color: '#718096', textAlign: 'center', marginTop: '8px' }}>
+                                                Figure {idx + 1}: Data Analysis for {selectedPub.title.split(' ')[0]}
+                                            </p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                            <div className="keywords-sec">
+                                <div className="tags-container">
+                                    {selectedPub.keywords?.map((tag: string, i: number) => (
+                                        <span key={i} className="keyword-tag">#{tag}</span>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* সাইডবার (Stats & Download) */}
+                        <aside className="detail-sidebar">
+                            <div className="stats-card-modern">
+                                <div className="stat-item-modern">
+                                    <strong>{selectedPub.citations}</strong>
+                                    <span>Citations</span>
+                                </div>
+                                <div className="stat-item-modern">
+                                    <strong>{selectedPub.downloads}</strong>
+                                    <span>Downloads</span>
+                                </div>
+                            </div>
+
+                            <button className="download-full-btn">
+                                <TbDownload /> Download PDF (Full Text)
+                            </button>
+                        </aside>
+                    </div>
+                </div>
+            </div>
+        );
+    }
     return (
         <>
             <Head>
-                <title>TensorCrest – Profile Page</title>
-                <meta
-                    name="description"
-                    content="TensorCrest - A Platform for Researchers"
-                />
+                <title>TensorCrest – Index Page</title>
+                <meta name="description" content="TensorCrest - A Platform for Researchers." />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" type="image/svg+xml" href="/logo.svg" />
             </Head>
-            {/* ================= HEADER ================= */}
-            <header className="fnav">
-                <div
-                    className="logo"
-                    onClick={() => router.push("/feed-page")}
-                    style={{ cursor: "pointer" }}
-                >
-                    <Image src="/logo.svg" alt="Logo" width={160} height={40} />
+            <header className="navbar-main">
+                <div className="logo">
+                    <Image
+                        src="/logo.svg"
+                        alt="ResearchCrest Logo"
+                        width={160}
+                        height={40}
+                        priority
+                    />
                 </div>
-                <div className="search">
-                    <input type="text" placeholder="Search In Tensor Crest" />
-                </div>
-                <nav className="feed-menu">
-                    <a style={{ cursor: "pointer" }} onClick={() => router.push("/network-page")}>
-                        Network</a>
-                    <a>Q&amp;A</a>
-                    <a>Career</a>
-                    <a>Scholarship</a>
-                    <a>En</a>
-                    <a className="nine-dots">
-                        <TbGridDots
-                            style={{
-                                verticalAlign: "middle",
-                                marginLeft: "6px",
-                                fontSize: "1.2rem",
-                                color: "#000",
-                            }}
+                <nav className="nn-nav">
+                    <a href="#" onClick={(e) => { e.preventDefault(); router.push("/career-page"); }}>Career</a>
+                    <a href="#" onClick={(e) => { e.preventDefault(); router.push("/network-page"); }}>Network</a>
+                    <a href="#" onClick={(e) => { e.preventDefault(); router.push("/qna-page"); }}>Q&A</a>
+                    <a href="#" onClick={(e) => { e.preventDefault(); router.push("/scholarship-page"); }}>Scholarship</a>
+                    <a href="#" onClick={(e) => { e.preventDefault(); router.push("/help-page"); }}>Help Center</a>
+                    {/* <a href="#" className="nine-dots">
+            <TbGridDots
+              style={{
+                verticalAlign: "middle",
+                marginLeft: "6px",
+                fontSize: "1.2rem",
+              }}
+            />
+          </a> */}
+                    {/* Nine Dots */}
+                    <div className="ninn-dots-wrapper" ref={dropdownRef}>
+                        <TbGridDots className="ninn-dots-icon"
+                            onClick={() => setOpen(!open)}
                         />
-                    </a>
-                    <a>
-                        <IoMdNotificationsOutline
-                            style={{
-                                verticalAlign: "middle",
-                                marginLeft: "6px",
-                                fontSize: "1.3rem",
-                                color: "#000",
-                            }}
-                        />
-                    </a>
-                    <a className="profile-wrapper">
-                        <img src="/images/prof.jpg" className="menu-logo" />
-                        <IoIosArrowDown className="arrow-icon" />
-                    </a>
+                        {/* Dropdown */}
+                        {open && (
+                            <div className="nn-dropdown">
+                                <div className="nn-dropdown-left">
+                                    <h4>My Apps</h4>
+                                    <a href="#">Find New Clients</a>
+                                    <a href="#">Groups</a>
+                                    <a href="#">Manage Billing</a>
+
+                                    <h4>Talent</h4>
+                                    <a href="#">Hire with AI</a>
+                                    <a href="#">Talent Insights</a>
+
+                                    <h4>Sales</h4>
+                                    <a href="#">Services Marketplace</a>
+                                </div>
+                                <div className="nn-dropdown-right">
+                                    <h4>Explore more for business</h4>
+                                    <a href="#">Hire on TensorCrest</a>
+                                    <a href="#">Sell with TensorCrest</a>
+                                    <a href="#">Post a job</a>
+                                    <a href="#">Advertise</a>
+                                    <a href="#">Get Premium</a>
+                                    <a href="#">Admin Center</a>
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </nav>
             </header>
-            {/* ================= PROFILE ================= */}
-            <section className="profile-page">
-                <section className="profile-wrap">
-                    <section className="pdng-hero"></section>
-                    {/* ===== HERO ===== */}
-                    <section className="prof-hero">
-                        <div className="prof-hero-bg">
-                            <img src="/images/cvr.jpg" alt="Profile Background" />
-                            <div className="hero-overlay">
-                                <div className="prof-hero-left">
-                                    <p className={`introo hd moontime`}>I Am</p>
-                                    <div className="namee-row">
-                                        <h1 className="name hd">Brand Gardner</h1>
-                                        <img
-                                            src="/images/icons/vrfd.svg"
-                                            alt="verified-tag"
-                                            className="vrfd-tg lg"
-                                        />
-                                    </div>
-                                    <p className="desgnation hd">
-                                        Assistant General Manager – HR
-                                        <br />
-                                        MHRM (University of London)
-                                    </p>
-                                    {/* <div className="sttcs lnk">
-                    <span>300+ connections</span>
-                    <span>465 Followers</span>
-                  </div> */}
-                                    <div className="cntact-info">
-                                        <p>
-                                            <MdOutlineMail /> gardner@gmail.com
-                                        </p>
-                                        <p>
-                                            <MdOutlineLocationOn />
-                                            Location: St. London Street, Southern Park
-                                        </p>
-                                    </div>
-                                    <div className="tags">
-                                        <span className="tgg wht">CSE</span>
-                                        <span className="tgg wht">Affiliations: 50</span>
-                                        <span className="tgg bluu">300+ Connections</span>
-                                        <span className="tgg bluu">465 Followers</span>
-                                        <span
-                                            className="tgg icn"
-                                            style={{ cursor: "pointer" }}
-                                            title="LinkedIn"
-                                            onClick={() =>
-                                                window.open(
-                                                    "https://www.linkedin.com/in/molly-gardner-624b2a138/",
-                                                    "_blank",
-                                                )
-                                            }
-                                        >
-                                            <FaLinkedin className="tag-icn" />
-                                        </span>
-                                        <span
-                                            className="tgg icn"
-                                            style={{ cursor: "pointer" }}
-                                            title="Google Scholar"
-                                            onClick={() =>
-                                                window.open(
-                                                    "https://scholar.google.com/citations?user=HZcIGI4AAAAJ&hl=en&oi=sra",
-                                                    "_blank",
-                                                )
-                                            }
-                                        >
-                                            <FaGoogleScholar className="tag-icn" />
-                                        </span>
-                                        <span
-                                            className="tgg icn"
-                                            style={{ cursor: "pointer" }}
-                                            title="Scopus"
-                                            onClick={() =>
-                                                window.open(
-                                                    "https://www.elsevier.com/products/scopus",
-                                                    "_blank",
-                                                )
-                                            }
-                                        >
-                                            <SiScopus className="tag-icn" />
-                                        </span>
-                                    </div>
-                                </div>
+            <div className="net-wrapper">
+                <div className="net-container">
+                    {/* SIDEBAR */}
+                    <aside className="net-sidebar">
+                        <div className="filter-card">
+                            <h3>Filters</h3>
+                            <div className="filter-item">
+                                <label>Gender</label>
+                                <select><option>All</option></select>
+                            </div>
+                            <div className="filter-item">
+                                <label>Rating</label>
+                                <select><option>All Ratings</option></select>
                             </div>
                         </div>
-                    </section>
-                    {/* ===== MAIN LAYOUT ===== */}
-                    <section className="pfile-layut">
-                        {/* ===== LEFT COLUMN ===== */}
-                        <div className="pfl-main">
-                            {/* ===== TABS ===== */}
-                            <div className="profile-tabs-wrap">
-                                <div className="pfl-tabs">
-                                    {PROFILE_TABS.map((tab) => (
-                                        <a
-                                            key={tab.key}
-                                            className={`tab ${activeTab === tab.key ? "active" : ""}`}
-                                            onClick={() => setActiveTab(tab.key)}
-                                        >
-                                            {tab.label}
-                                        </a>
-                                    ))}
-                                </div>
-                            </div>
-                            {/* ===== TAB CONTENT ===== */}
-                            <section className="profile-tab-body">
-                                {PROFILE_TABS.find((tab) => tab.key === activeTab)?.component}
-                            </section>
-                        </div>
+                    </aside>
 
-                        {/* ===== RIGHT COLUMN ===== */}
-                        <div className="pfl-right">
-                            <aside className="pfl-card">
-                                <div className="atr-row">
-                                    <div className="atr-wrap">
-                                        <img src="/images/prof.jpg" />
-                                    </div>
-                                    <button
-                                        className="btn-downldd"
-                                        onClick={() => setShowUploadModal(true)}
-                                    >
-                                        Upload Resume
-                                    </button>
+                    {/* MAIN CONTENT */}
+                    <main className="net-main">
+                        <h1 className="page-title">Network Page</h1>
+                        {/* Top 5% Researchers */}
+                        <section className="res-section">
+                            <div className="section-header">
+                                <h2>Top 5% Researchers</h2>
+                                <div className="nav-btns">
+                                    <button onClick={() => scroll(topRef, 'left')}><TbChevronLeft /></button>
+                                    <button onClick={() => scroll(topRef, 'right')}><TbChevronRight /></button>
                                 </div>
-                                <div className="card-bttns">
-                                    <button className="btn-dark">
-                                        <FaLink /> Connect
-                                    </button>
-                                    <button className="btn-dark">
-                                        <FaEnvelope /> Message
-                                    </button>
+                            </div>
+                            <div className="carousel-track" ref={topRef}>
+                                {/* এখানে researchers অ্যারে ম্যাপ করুন এবং img প্রপস পাস করুন */}
+                                {researchers.map((res) => (
+                                    <ResearcherCard
+                                        key={res.id}
+                                        name={res.name}
+                                        score={res.score}
+                                        img={res.img}
+                                    />
+                                ))}
+                            </div>
+                        </section>
+
+                        {/* Next 5% Researchers */}
+                        <section className="res-section">
+                            <div className="section-header">
+                                <h2>Next 5% Researchers</h2>
+                                <div className="nav-btns">
+                                    <button onClick={() => scroll(nextRef, 'left')}><TbChevronLeft /></button>
+                                    <button onClick={() => scroll(nextRef, 'right')}><TbChevronRight /></button>
                                 </div>
-                                <div className="card-stt">
-                                    <div className="stat pad">
-                                        <p>Publications</p>
-                                        <h4>42</h4>
-                                    </div>
-                                    <div className="stat pad">
-                                        <p>Citations</p>
-                                        <h4>59265</h4>
-                                    </div>
-                                    <div className="stat pad">
-                                        <p>h-index</p>
-                                        <h4>119</h4>
-                                    </div>
-                                </div>
-                                <div className="card-grid">
-                                    <div className="grid-label">Domain & Classification:</div>
-                                    <div className="grid-valueu">
-                                        Electrical Engineering
-                                        <br />
-                                        Faculty of Technology
-                                        <br />
-                                        Advanced Polymers
-                                    </div>
-                                    <div className="grid-label">Research Interests:</div>
-                                    <div className="grid-valueu">
-                                        Renewable Energy
-                                        <br />
-                                        Internet of Things
-                                        <br />
-                                        Machine Learning
-                                    </div>
-                                    <div className="grid-label">Advisors:</div>
-                                    <div className="grid-valueu"></div>
-                                    <div className="grid-label">PhD Advisors:</div>
-                                    <div className="grid-valueu">
-                                        <span className="green">Dr. Emily Carter</span>
-                                        <br />
-                                        <span className="green">Dr. Steven Harris</span>
-                                    </div>
-                                    <div className="grid-label">MS Advisors:</div>
-                                    <div className="grid-valueu">
-                                        <span className="green">Prof. Dr. Jonathan Miles</span>
-                                        <br />
-                                        <span className="green">Prof. Dr. Rebecca Thornton</span>
-                                    </div>
-                                    <div className="grid-label">Responsibilities:</div>
-                                    <div className="grid-valueu">
-                                        <ul className="resp-list">
-                                            <li>
-                                                Introduction to Materials and Manufacture (Module
-                                                Co-ordinator)
-                                            </li>
-                                            <li>Materials and Manufacture</li>
-                                            <li>
-                                                Sustainable Development and Environmental Management
-                                            </li>
-                                            <li>
-                                                Design and Sustainable Development (Distance Learning
-                                                Module)
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </aside>
-                            <section className="ntbl-researcher">
-                                {/* HEADER */}
-                                <div className="notable-head">
-                                    <h4 className="resrch-titl-left">Notable Researcher</h4>
-                                </div>
-                                {/* CAROUSEL */}
-                                <Carousel
-                                    indicators={false}
-                                    controls
-                                    interval={null} // ✅ autoplay OFF
-                                >
-                                    {slides.map((group, index) => (
-                                        <Carousel.Item key={index}>
-                                            <div className="researcher-row">
-                                                {group.map((item, i) => (
-                                                    <div className="rsrcher-item" key={i}>
-                                                        <img src={item.img} alt={item.name} />
-                                                        <div className="resrcher-info">
-                                                            <h6>{item.name}</h6>
-                                                            <p>{item.role}</p>
-                                                            <a href={item.link}>See Details</a>
-                                                        </div>
+                            </div>
+                            <div className="carousel-track" ref={nextRef}>
+                                {/* এখানেও img={res.img} অবশ্যই দিতে হবে */}
+                                {researchers.slice().reverse().map((res) => (
+                                    <ResearcherCard
+                                        key={res.id}
+                                        name={res.name}
+                                        score={res.score}
+                                        img={res.img}
+                                    />
+                                ))}
+                            </div>
+                        </section>
+
+
+                        {/* PUBLICATIONS SECTION - Researcher Based Design */}
+                        <section className="pub-section-modern">
+                            <div className="section-header-modern">
+                                <h2>Top Content Publications</h2>
+                                <p>Discover the latest research in your network</p>
+                            </div>
+
+                            <div className="pub-list-vertical">
+                                {publications.map((pub) => (
+                                    <div key={pub.id} className="rg-full-card">
+
+                                        {/* Top Researcher Header (নির্ধারিত রিসার্চার হাইলাইট) */}
+                                        <div className="rg-card-author-header">
+                                            <img
+                                                src={`https://i.pravatar.cc/150?u=${pub.fullAuthors?.[0]}`}
+                                                alt="Lead Researcher"
+                                                className="header-avatar"
+                                            />
+                                            <div className="header-info">
+                                                <span className="author-name-link">{pub.fullAuthors?.[0]}</span>
+                                                <span className="author-action-text">authored this research</span>
+                                            </div>
+                                            <button className="header-dropdown-btn">
+                                                <TbChevronRight className="rotate-90" />
+                                            </button>
+                                        </div>
+
+
+
+                                        {/* Figure Preview Strip - Technical Research Figures */}
+                                        <div className="rg-figure-strip" onClick={() => setSelectedPub(pub)}>
+                                            {[
+                                                "https://pub.mdpi-res.com/sensors/sensors-19-03513/article_deploy/html/images/sensors-19-03513-g001.png",
+                                                "/images/ccc.png",
+                                                "/images/bbb.png",
+                                                "/images/hhh.png",
+                                                "https://www.frontiersin.org/files/Articles/812328/fphy-09-812328-g002.jpg" // Comparative Analysis Table
+                                            ].map((imgUrl, idx) => (
+                                                <div key={idx} className="rg-figure-box">
+                                                    <img
+                                                        src={imgUrl}
+                                                        alt="Research Diagram"
+                                                        style={{
+                                                            width: '100%',
+                                                            height: '100%',
+                                                            objectFit: 'contain', // যাতে টেকনিক্যাল ডায়াগ্রামের কোনো অংশ কেটে না যায়
+                                                            padding: '4px',
+                                                            background: '#fff'
+                                                        }}
+                                                    />
+                                                    {idx === 4 && <div className="more-overlay">+1</div>}
+                                                </div>
+                                            ))}
+                                        </div>
+
+
+
+
+
+
+
+                                        {/* Content Body */}
+                                        <div className="rg-card-body">
+                                            <h3 className="rg-title" onClick={() => setSelectedPub(pub)}>
+                                                {pub.title}
+                                            </h3>
+
+                                            <div className="rg-meta-line">
+                                                <span className="rg-type-badge">Article</span>
+                                                <span className="rg-meta-text">{pub.date} · {pub.downloads} Reads · {pub.citations} Citations</span>
+                                            </div>
+
+                                            <div className="rg-journal-line">
+                                                <div className="journal-logo-placeholder"></div>
+                                                <span>{pub.journal}</span>
+                                            </div>
+
+                                            {/* Co-authors List with Avatars */}
+                                            <div className="rg-co-authors">
+                                                {pub.fullAuthors?.map((author: string, idx: number) => (
+                                                    <div key={idx} className="co-author-tag">
+                                                        <img src={`https://i.pravatar.cc/40?u=${author}`} alt="" />
+                                                        <span>{author}{idx < pub.fullAuthors.length - 1 ? ' · ' : ''}</span>
                                                     </div>
                                                 ))}
                                             </div>
-                                        </Carousel.Item>
-                                    ))}
-                                </Carousel>
-                            </section>
-                            <div className="ntbles-card notable-card">
-                                <div className="sid-header">
-                                    <h4 className="resrch-titl-left">People You May Know</h4>
-                                </div>
-                                <Carousel
-                                    indicators={false}
-                                    controls={true}
-                                    interval={null}
-                                    className="notable-carousel"
-                                >
-                                    <Carousel.Item>
-                                        <div className="notable-row">
-                                            <div className="notable-user">
-                                                <img src="https://randomuser.me/api/portraits/men/45.jpg" />
-                                                <p>Alfredo</p>
-                                                <span>Professor</span>
-                                                <p className="sub">alfredo@gmail.com</p>
+
+                                            {/* Action Buttons */}
+                                            <div className="rg-footer-actions">
+                                                <div className="action-group-left">
+                                                    <button className="rg-btn-primary">Download</button>
+                                                    <button className="rg-btn-secondary">Save</button>
+                                                </div>
+                                                <div className="action-group-right">
+                                                    <button className="rg-btn-minimal">Follow</button>
+                                                    <button className="rg-btn-minimal">Recommend</button>
+                                                    <button className="rg-btn-minimal">Share</button>
+                                                </div>
                                             </div>
-                                            <div className="notable-user">
-                                                <img src="https://randomuser.me/api/portraits/women/52.jpg" />
-                                                <p>Cahaya</p>
-                                                <span>Teacher</span>
-                                                <p>cahaya@gmail.com</p>
-                                            </div>
-                                            <div className="notable-user">
-                                                <img src="https://randomuser.me/api/portraits/women/68.jpg" />
-                                                <p>Mariana</p>
-                                                <span>Student</span>
-                                                <p>mariana@gmail.com</p>
+
+                                            <div className="rg-social-proof">
+                                                <TbUserCircle size={14} className="social-icon" />
+                                                <span><strong>2 researchers</strong> recommend this research</span>
                                             </div>
                                         </div>
-                                    </Carousel.Item>
-                                    <Carousel.Item>
-                                        <div className="notable-row">
-                                            <div className="notable-user">
-                                                <img src="https://randomuser.me/api/portraits/men/46.jpg" />
-                                                <p>James</p>
-                                                <span>Professor</span>
-                                                <p className="sub">alfredo@gmail.com</p>
-                                            </div>
-                                            <div className="notable-user">
-                                                <img src="https://randomuser.me/api/portraits/women/53.jpg" />
-                                                <p>Susan</p>
-                                                <span>Teacher</span>
-                                                <p>susan@gmail.com</p>
-                                            </div>
-                                            <div className="notable-user">
-                                                <img src="https://randomuser.me/api/portraits/women/69.jpg" />
-                                                <p>Linda</p>
-                                                <span>Student</span>
-                                                <p>linda@gmail.com</p>
-                                            </div>
-                                        </div>
-                                    </Carousel.Item>
-                                </Carousel>
-                                <button className="read-more">SEE MORE</button>
+                                    </div>
+                                ))}
                             </div>
-                            <section className="suggst-section">
-                                <h4 className="resrch-titl-left">You May Like</h4>
-                                <p className="subb">Pages for you</p>
-                                <div className="suggest-list">
-                                    <div className="suggest-item">
-                                        <div className="suggest-left">
-                                            <img
-                                                src="/images/scigrp.jpg"
-                                                className="suggest-avatar-img"
-                                            />
-                                            <span>Science Group</span>
-                                        </div>
-                                        <button className="follow-btn">
-                                            <FaUserPlus /> Follow
-                                        </button>
-                                    </div>
-                                    <div className="suggest-item">
-                                        <div className="suggest-left">
-                                            <img
-                                                src="https://randomuser.me/api/portraits/men/40.jpg"
-                                                className="suggest-avatar-img"
-                                            />
-                                            <span>Research Group</span>
-                                        </div>
-                                        <button className="follow-btn">
-                                            <FaUserPlus /> Follow
-                                        </button>
-                                    </div>
-                                </div>
-                            </section>
+                        </section>
+
+                    </main>
+                </div>
+                {/* FOOTER */}
+                <footer className="net-footer">
+                    <div className="footer-container">
+                        <div className="footer-brand-section">
+                            <h2 className="footer-logo">Tensor<span>Crest</span></h2>
+                            <p>Stay in the know by subscribing to our newsletter below</p>
+                            <div className="newsletter-box">
+                                <input type="email" placeholder="Enter your email address" />
+                                <button className="send-btn"><TbSend /></button>
+                            </div>
                         </div>
-                    </section>
-                </section>
-            </section>
-            {/* ================= FOOTER ================= */}
-            <footer className="site-footer">
-                <div className="footer-top">
-                    <div className="footer-left">
-                        <div className="logo">
-                            <Image
-                                src="/logo.svg"
-                                alt="TensorCrest Logo"
-                                width={160}
-                                height={40}
-                                priority
-                            />
-                        </div>
-                        {/* <h3 className="footer-logo">TensorCrest</h3> */}
-                        <p>Stay in the know by subscribing to our newsletter below</p>
-                        <div className="newsletter">
-                            <input type="email" placeholder="Enter your email address" />
-                            <button>→</button>
+                        <div className="footer-links-wrapper">
+                            <div className="footer-col">
+                                <h4>Contact</h4>
+                                <a href="#">Contact Form</a>
+                                <a href="#">FAQ</a>
+                                <p className="footer-bottom-text">© Researchcrest. All Rights Reserved 2023</p>
+                            </div>
+                            <div className="footer-col">
+                                <h4>Legal</h4>
+                                <a href="#">Privacy Policy</a>
+                                <a href="#">T&C</a>
+                            </div>
+                            <div className="footer-col">
+                                <h4>Social</h4>
+                                <a href="#">Facebook</a>
+                                <a href="#">LinkedIn</a>
+                            </div>
                         </div>
                     </div>
-
-                    <div className="footer-right">
-                        <div className="footer-col">
-                            <h4>Contact</h4>
-                            <a href="#">Contact Form</a>
-                            <a href="#">FAQ</a>
-                            <a href="#">Privacy Policy</a>
-                            <a href="#">T&amp;C</a>
-                        </div>
-
-                        <div className="footer-col">
-                            <h4>Social</h4>
-                            <a href="#">Facebook</a>
-                            <a href="#">Youtube</a>
-                            <a href="#">Twitter</a>
-                            <a href="#">LinkedIn</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="footer-bottom">
-                    <span>© Researchcrest. All Rights Reserved 2023</span>
-                    <a href="#">Terms &amp; Conditions</a>
-                </div>
-            </footer>
-            <UploadPdfModal
-                open={showUploadModal}
-                onClose={() => setShowUploadModal(false)}
-            />
-            <FloatingChatBox />
+                </footer>
+            </div>
         </>
     );
-}
+};
+
+const ResearcherCard = ({ name, score, img }: { name: string, score: string, img: string }) => (
+    <div className="res-card-small">
+        <div className="card-top-teal"></div>
+        <div className="card-content">
+            {/* ইমেজ সেকশন */}
+            <div className="avatar-box">
+                <img
+                    src={img}
+                    alt={name}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
+                    onError={(e) => { e.currentTarget.src = `https://i.pravatar.cc/150?u=${name}`; }}
+                />
+            </div>
+
+            {/* নাম এবং স্কোর */}
+            <h4>{name} <span className="score-text">{score}</span></h4>
+            <p className="desig" style={{ marginBottom: '12px' }}>Professor, AI & ML</p>
+
+            {/* সরাসরি স্ট্যাটাস বা ভ্যালুগুলো দেখানো হচ্ছে (হোভার ছাড়া) */}
+            <div className="card-stats-row" style={{
+                display: 'flex',
+                justifyContent: 'space-around',
+                fontSize: '11px',
+                borderTop: '1px solid #edf2f7',
+                paddingTop: '10px',
+                marginBottom: '15px',
+                textAlign: 'center'
+            }}>
+                <div>
+                    <div style={{ fontWeight: 'bold', color: '#2d3748' }}>42</div>
+                    <div style={{ color: '#718096' }}>Publication</div>
+                </div>
+                <div>
+                    <div style={{ fontWeight: 'bold', color: '#2d3748' }}>3.1K</div>
+                    <div style={{ color: '#718096' }}>Citations</div>
+                </div>
+                <div>
+                    <div style={{ fontWeight: 'bold', color: '#2d3748' }}>28</div>
+                    <div style={{ color: '#718096' }}>H-index</div>
+                </div>
+            </div>
+
+            {/* অ্যাকশন বাটন */}
+            <div className="card-footer-btns">
+                <button className="btn-f">Follow</button>
+                <button className="btn-c">Chat</button>
+            </div>
+        </div>
+    </div>
+);
+
+export default NetworkPage;
