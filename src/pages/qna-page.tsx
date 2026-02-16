@@ -81,8 +81,8 @@ export default function QnAPage() {
 
   return (
     <>
-          <Head>
-        <title>TensorCrest – Index Page</title>
+      <Head>
+        <title>TensorCrest – Q&A Page</title>
         <meta name="description" content="TensorCrest - A Platform for Researchers." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" type="image/svg+xml" href="/logo.svg" />
@@ -97,12 +97,15 @@ export default function QnAPage() {
             priority
           />
         </div>
+        <div className="inp-search">
+          <input type="text" placeholder="Search In Tensor Crest" />
+        </div>
         <nav className="nn-nav">
-          <a href="#" onClick={(e) => { e.preventDefault(); router.push("/career-page"); }}>Career</a>
-          <a href="#" onClick={(e) => { e.preventDefault(); router.push("/network-page"); }}>Network</a>
-          <a href="#" onClick={(e) => { e.preventDefault(); router.push("/qna-page"); }}>Q&A</a>
-          <a href="#" onClick={(e) => { e.preventDefault(); router.push("/scholarship-page"); }}>Scholarship</a>
-          <a href="#" onClick={(e) => { e.preventDefault(); router.push("/help-page"); }}>Help Center</a>
+          <Link href="/career-page">Career</Link>
+          <Link href="/network-page">Network</Link>
+          <Link href="/qna-page">Q&A</Link>
+          <Link href="/scholarship-page">Scholarships</Link>
+          <Link href="/help-page">Help Center</Link>
           {/* <a href="#" className="nine-dots">
             <TbGridDots
               style={{
@@ -113,11 +116,10 @@ export default function QnAPage() {
             />
           </a> */}
           {/* Nine Dots */}
-          <div className="ninn-dots-wrapper" ref={dropdownRef}>
+          {/* <div className="ninn-dots-wrapper" ref={dropdownRef}>
             <TbGridDots className="ninn-dots-icon"
               onClick={() => setOpen(!open)}
             />
-            {/* Dropdown */}
             {open && (
               <div className="nn-dropdown">
                 <div className="nn-dropdown-left">
@@ -144,7 +146,7 @@ export default function QnAPage() {
                 </div>
               </div>
             )}
-          </div>
+          </div> */}
         </nav>
       </header>
     <div className="qna-main-wrapper">
@@ -253,20 +255,50 @@ export default function QnAPage() {
         </main>
       </div>
 
-      {/* --- Footer --- */}
-      <footer className="tc-footer">
-        <div className="tc-footer-inner">
-          <div className="tc-f-brand">
-            <h2>Tensor<span>Crest</span></h2>
-            <p>© 2026 Research Ecosystem</p>
-          </div>
-          <div className="tc-f-links">
-            <a href="#">Contact</a>
-            <a href="#">Privacy</a>
-            <a href="#">Terms</a>
-          </div>
-        </div>
-      </footer>
+            {/* ================= FOOTER ================= */}
+            <footer className="site-footer">
+                <div className="footer-top">
+                    <div className="footer-left">
+                        <div className="logo">
+                            <Image
+                                src="/logo.svg"
+                                alt="TensorCrest Logo"
+                                width={160}
+                                height={40}
+                                priority
+                            />
+                        </div>
+                        {/* <h3 className="footer-logo">TensorCrest</h3> */}
+                        <p>Stay in the know by subscribing to our newsletter below</p>
+                        <div className="newsletter">
+                            <input type="email" placeholder="Enter your email address" />
+                            <button>→</button>
+                        </div>
+                    </div>
+
+                    <div className="footer-right">
+                        <div className="footer-col">
+                            <h4>Contact</h4>
+                            <a href="#">Contact Form</a>
+                            <a href="#">FAQ</a>
+                            <a href="#">Privacy Policy</a>
+                            <a href="#">T&amp;C</a>
+                        </div>
+                        <div className="footer-col">
+                            <h4>Social</h4>
+                            <a href="#">Facebook</a>
+                            <a href="#">Youtube</a>
+                            <a href="#">Twitter</a>
+                            <a href="#">LinkedIn</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="footer-bottom">
+                    <span>© Researchcrest. All Rights Reserved 2023</span>
+                    <a href="#">Terms &amp; Conditions</a>
+                </div>
+            </footer>
     </div>
     </>
   );

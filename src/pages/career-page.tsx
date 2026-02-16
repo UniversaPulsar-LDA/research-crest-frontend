@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
@@ -347,60 +348,74 @@ export default function CareerPage() {
 
     return (
         <>
-            <Head>
-                <title>TensorCrest – Career Page</title>
-                <meta
-                    name="description"
-                    content="TensorCrest - A Platform for Researchers"
-                />
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <link rel="icon" type="image/svg+xml" href="/logo.svg" />
-            </Head>
-            {/* ================= HEADER ================= */}
-            <header className="fnav">
-                <div
-                    className="logo"
-                    onClick={() => router.push("/feed-page")}
-                    style={{ cursor: "pointer" }}
-                >
-                    <Image src="/logo.svg" alt="Logo" width={160} height={40} />
+     <Head>
+        <title>TensorCrest – Career Page</title>
+        <meta name="description" content="TensorCrest - A Platform for Researchers." />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+      </Head>
+      <header className="navbar-main">
+        <div className="logo">
+          <Image
+            src="/logo.svg"
+            alt="ResearchCrest Logo"
+            width={160}
+            height={40}
+            priority
+          />
+        </div>
+        <div className="inp-search">
+          <input type="text" placeholder="Search In Tensor Crest" />
+        </div>
+        <nav className="nn-nav">
+          <Link href="/career-page">Career</Link>
+          <Link href="/network-page">Network</Link>
+          <Link href="/qna-page">Q&A</Link>
+          <Link href="/scholarship-page">Scholarships</Link>
+          <Link href="/help-page">Help Center</Link>
+          {/* <a href="#" className="nine-dots">
+            <TbGridDots
+              style={{
+                verticalAlign: "middle",
+                marginLeft: "6px",
+                fontSize: "1.2rem",
+              }}
+            />
+          </a> */}
+          {/* Nine Dots */}
+          {/* <div className="ninn-dots-wrapper" ref={dropdownRef}>
+            <TbGridDots className="ninn-dots-icon"
+              onClick={() => setOpen(!open)}
+            />
+            {open && (
+              <div className="nn-dropdown">
+                <div className="nn-dropdown-left">
+                  <h4>My Apps</h4>
+                  <a href="#">Find New Clients</a>
+                  <a href="#">Groups</a>
+                  <a href="#">Manage Billing</a>
+
+                  <h4>Talent</h4>
+                  <a href="#">Hire with AI</a>
+                  <a href="#">Talent Insights</a>
+
+                  <h4>Sales</h4>
+                  <a href="#">Services Marketplace</a>
                 </div>
-                <div className="search">
-                    <input type="text" placeholder="Search In Tensor Crest" />
+                <div className="nn-dropdown-right">
+                  <h4>Explore more for business</h4>
+                  <a href="#">Hire on TensorCrest</a>
+                  <a href="#">Sell with TensorCrest</a>
+                  <a href="#">Post a job</a>
+                  <a href="#">Advertise</a>
+                  <a href="#">Get Premium</a>
+                  <a href="#">Admin Center</a>
                 </div>
-                <nav className="feed-menu">
-                    <a>Career</a>
-                    <a>Q&amp;A</a>
-                    <a style={{ cursor: "pointer" }} onClick={() => router.push("/network-page")}>
-                        Network</a>
-                    <a>Scholarship</a>
-                    <a>En</a>
-                    <a className="nine-dots">
-                        <TbGridDots
-                            style={{
-                                verticalAlign: "middle",
-                                marginLeft: "6px",
-                                fontSize: "1.2rem",
-                                color: "#000",
-                            }}
-                        />
-                    </a>
-                    <a>
-                        <IoMdNotificationsOutline
-                            style={{
-                                verticalAlign: "middle",
-                                marginLeft: "6px",
-                                fontSize: "1.3rem",
-                                color: "#000",
-                            }}
-                        />
-                    </a>
-                    <a className="profile-wrapper">
-                        <img src="/images/prof.jpg" className="menu-logo" />
-                        <IoIosArrowDown className="arrow-icon" />
-                    </a>
-                </nav>
-            </header>
+              </div>
+            )}
+          </div> */}
+        </nav>
+      </header>
             {/* ================= PROFILE ================= */}
             <section className="profile-page">
                 <section className="profile-wrap">

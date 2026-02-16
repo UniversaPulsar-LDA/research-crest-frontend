@@ -41,13 +41,13 @@ export default function AskQuestion() {
               </ul>
             </div>
 
-            <div className="input-group">
+            <div className="bs-input-group">
               <label>Title</label>
               <p>Be specific and imagine you’re asking a question to another researcher.</p>
               <input type="text" placeholder="e.g. How to optimize GPT-4 for academic citation analysis?" />
             </div>
 
-            <div className="input-group">
+            <div className="bs-input-group">
               <label>What are the details of your problem?</label>
               <p>Introduce the problem and expand on what you put in the title. Minimum 20 characters.</p>
               <div className="editor-placeholder">
@@ -55,7 +55,7 @@ export default function AskQuestion() {
               </div>
             </div>
 
-            <div className="input-group">
+            <div className="bs-input-group">
               <label>Tags</label>
               <p>Add up to 5 tags to describe what your question is about.</p>
               <input type="text" placeholder="e.g. (machine-learning python research)" />

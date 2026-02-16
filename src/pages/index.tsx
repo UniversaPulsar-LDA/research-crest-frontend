@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Head from "next/head";
 import Image from "next/image";
 import { TbGridDots } from "react-icons/tb";
@@ -78,12 +79,15 @@ export default function Index() {
             priority
           />
         </div>
+        <div className="inp-search">
+          <input type="text" placeholder="Search In Tensor Crest" />
+        </div>
         <nav className="nn-nav">
-          <a href="#" onClick={(e) => { e.preventDefault(); router.push("/career-page"); }}>Career</a>
-          <a href="#" onClick={(e) => { e.preventDefault(); router.push("/network-page"); }}>Network</a>
-          <a href="#" onClick={(e) => { e.preventDefault(); router.push("/qna-page"); }}>Q&A</a>
-          <a href="#" onClick={(e) => { e.preventDefault(); router.push("/scholarship-page"); }}>Scholarship</a>
-          <a href="#" onClick={(e) => { e.preventDefault(); router.push("/help-page"); }}>Help Center</a>
+          <Link href="/career-page">Career</Link>
+          <Link href="/network-page">Network</Link>
+          <Link href="/qna-page">Q&A</Link>
+          <Link href="/scholarship-page">Scholarships</Link>
+          <Link href="/help-page">Help Center</Link>
           {/* <a href="#" className="nine-dots">
             <TbGridDots
               style={{
@@ -94,11 +98,10 @@ export default function Index() {
             />
           </a> */}
           {/* Nine Dots */}
-          <div className="ninn-dots-wrapper" ref={dropdownRef}>
+          {/* <div className="ninn-dots-wrapper" ref={dropdownRef}>
             <TbGridDots className="ninn-dots-icon"
               onClick={() => setOpen(!open)}
             />
-            {/* Dropdown */}
             {open && (
               <div className="nn-dropdown">
                 <div className="nn-dropdown-left">
@@ -125,7 +128,7 @@ export default function Index() {
                 </div>
               </div>
             )}
-          </div>
+          </div> */}
         </nav>
       </header>
       <section className="i-hero">

@@ -73,6 +73,7 @@
     gap: 10px;
     padding: 8px 15px;
     border-right: 1px solid #f1f5f9;
+        justify-content: center;
 }
 
 .input-group i { color: var(--teal); font-size: 14px; }
