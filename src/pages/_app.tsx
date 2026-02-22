@@ -15,6 +15,7 @@ import "@/styles/network.css";
 // import "@/styles/research.css";
 import type { AppProps } from "next/app";
 import { Roboto } from "next/font/google";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -22,5 +23,9 @@ const roboto = Roboto({
   variable: "--font-roboto",
 });
 export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+  return (
+    <AuthProvider>
+      <Component {...pageProps} />
+    </AuthProvider>
+  );
 }

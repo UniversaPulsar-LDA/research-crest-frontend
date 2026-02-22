@@ -4,8 +4,12 @@ import Image from "next/image";
 import { TbGridDots } from "react-icons/tb";
 import { useRouter } from "next/router";
 import { useState, useRef, useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+
 export default function Index() {
   const router = useRouter();
+  const { login, register, isLoading } = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [open, setOpen] = useState(false);
@@ -14,22 +18,53 @@ export default function Index() {
   const [view, setView] = useState("login");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [institution, setInstitution] = useState("");
+  const [phone, setPhone] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const handleLogin = () => {
-    if (email === "brand@gmail.com" && password === "12345678") {
-      router.push("/feed-page");
-    } else {
-      alert("Invalid email or password");
-    }
-  };
-  const handleRegister = () => {
-    if (password !== confirmPassword) {
-      alert("Passwords do not match!");
+
+  const [authError, setAuthError] = useState("");
+
+  const handleLogin = async () => {
+    setAuthError("");
+    if (!email || !password) {
+      setAuthError("Email and password are required");
       return;
     }
-    alert("Account created successfully! Please login.");
-    setView("login");
+
+    try {
+      await login({ email, password });
+      router.push("/feed-page");
+    } catch (err: any) {
+      setAuthError(err.message || "Failed to login. Please check credentials.");
+    }
+  };
+
+  const handleRegister = async () => {
+    setAuthError("");
+    if (!firstName || !lastName || !email || !password) {
+      setAuthError("All fields are required");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setAuthError("Passwords do not match!");
+      return;
+    }
+
+    try {
+      await register({
+        name: `${firstName} ${lastName}`.trim(),
+        email,
+        phone,
+        password,
+        password_confirmation: confirmPassword,
+        role: "User" // Required by backend
+      });
+      alert("Account created successfully! Please log in.");
+      setView("login");
+      setPassword("");
+      setConfirmPassword("");
+    } catch (err: any) {
+      setAuthError(err.message || "Failed to register.");
+    }
   };
 
   const handleSendCode = () => {
@@ -47,6 +82,7 @@ export default function Index() {
       alert("Please enter a valid 6-digit code.");
     }
   };
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -171,6 +207,7 @@ export default function Index() {
             {view === "login" && (
               <>
                 <h2>Welcome to ResearchCrest</h2>
+                {authError && <p style={{ color: 'red', fontSize: '14px', marginBottom: '10px' }}>{authError}</p>}
                 <label>Email or Phone</label>
                 <input type="text"
                   placeholder="you@example.com"
@@ -185,11 +222,13 @@ export default function Index() {
                 />
                 <button className="login-btn"
                   onClick={handleLogin}
-                >🔒 Log in
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Loading...' : '🔒 Log in'}
                 </button>
                 <div className="login-links">
-                  <a href="#" onClick={(e) => { e.preventDefault(); setView("forgot"); }}>Forgot password?</a>
-                  <a href="#" onClick={(e) => { e.preventDefault(); setView("register"); }}>Create new account</a>
+                  <a href="#" onClick={(e) => { e.preventDefault(); setView("forgot"); setAuthError(""); }}>Forgot password?</a>
+                  <a href="#" onClick={(e) => { e.preventDefault(); setView("register"); setAuthError(""); }}>Create new account</a>
                 </div>
               </>
             )}
@@ -198,6 +237,7 @@ export default function Index() {
               <>
                 <h2>Create Account</h2>
                 <p className="card-subtitle">Join our research community today.</p>
+                {authError && <p style={{ color: 'red', fontSize: '14px', marginBottom: '10px' }}>{authError}</p>}
                 <div className="compact-form-grid">
                   <div className="input-row" style={{ display: 'flex', gap: '10px' }}>
                     <div className="field-group" style={{ flex: 1 }}>
@@ -209,9 +249,15 @@ export default function Index() {
                       <input type="text" placeholder="Doe" value={lastName} onChange={(e) => setLastName(e.target.value)} />
                     </div>
                   </div>
-                  <div className="field-group">
-                    <label>Email</label>
-                    <input type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+                  <div className="input-row" style={{ display: 'flex', gap: '10px' }}>
+                    <div className="field-group" style={{ flex: 1 }}>
+                      <label>Email</label>
+                      <input type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+                    </div>
+                    <div className="field-group" style={{ flex: 1 }}>
+                      <label>Phone</label>
+                      <input type="tel" placeholder="+123456789" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                    </div>
                   </div>
                   <div className="input-row" style={{ display: 'flex', gap: '10px' }}>
                     <div className="field-group" style={{ flex: 1 }}>
@@ -224,11 +270,11 @@ export default function Index() {
                     </div>
                   </div>
                 </div>
-                <button className="login-btn" style={{ marginTop: '20px' }} onClick={handleRegister}>
-                  ✨ Create Account
+                <button className="login-btn" style={{ marginTop: '20px' }} onClick={handleRegister} disabled={isLoading}>
+                  {isLoading ? 'Loading...' : '✨ Create Account'}
                 </button>
                 <div className="login-links center-link" style={{ justifyContent: 'center', marginTop: '10px' }}>
-                  <a href="#" onClick={(e) => { e.preventDefault(); setView("login"); }}>Already have an account? Log in</a>
+                  <a href="#" onClick={(e) => { e.preventDefault(); setView("login"); setAuthError(""); }}>Already have an account? Log in</a>
                 </div>
               </>
             )}

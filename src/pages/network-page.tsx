@@ -16,7 +16,7 @@ const NetworkPage = () => {
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    const scroll = (ref: React.RefObject<HTMLDivElement>, direction: 'left' | 'right') => {
+    const scroll = (ref: React.RefObject<HTMLDivElement | null>, direction: 'left' | 'right') => {
         if (ref.current) {
             const scrollAmount = 300;
             ref.current.scrollBy({
@@ -207,32 +207,32 @@ const NetworkPage = () => {
     }
     return (
         <>
-      <Head>
-        <title>TensorCrest – Network Page</title>
-        <meta name="description" content="TensorCrest - A Platform for Researchers." />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" type="image/svg+xml" href="/logo.svg" />
-      </Head>
-      <header className="navbar-main">
-        <div className="logo">
-          <Image
-            src="/logo.svg"
-            alt="ResearchCrest Logo"
-            width={160}
-            height={40}
-            priority
-          />
-        </div>
-        <div className="inp-search">
-          <input type="text" placeholder="Search In Tensor Crest" />
-        </div>
-        <nav className="nn-nav">
-          <Link href="/career-page">Career</Link>
-          <Link href="/network-page">Network</Link>
-          <Link href="/qna-page">Q&A</Link>
-          <Link href="/scholarship-page">Scholarships</Link>
-          <Link href="/help-page">Help Center</Link>
-          {/* <a href="#" className="nine-dots">
+            <Head>
+                <title>TensorCrest – Network Page</title>
+                <meta name="description" content="TensorCrest - A Platform for Researchers." />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+            </Head>
+            <header className="navbar-main">
+                <div className="logo">
+                    <Image
+                        src="/logo.svg"
+                        alt="ResearchCrest Logo"
+                        width={160}
+                        height={40}
+                        priority
+                    />
+                </div>
+                <div className="inp-search">
+                    <input type="text" placeholder="Search In Tensor Crest" />
+                </div>
+                <nav className="nn-nav">
+                    <Link href="/career-page">Career</Link>
+                    <Link href="/network-page">Network</Link>
+                    <Link href="/qna-page">Q&A</Link>
+                    <Link href="/scholarship-page">Scholarships</Link>
+                    <Link href="/help-page">Help Center</Link>
+                    {/* <a href="#" className="nine-dots">
             <TbGridDots
               style={{
                 verticalAlign: "middle",
@@ -241,8 +241,8 @@ const NetworkPage = () => {
               }}
             />
           </a> */}
-          {/* Nine Dots */}
-          {/* <div className="ninn-dots-wrapper" ref={dropdownRef}>
+                    {/* Nine Dots */}
+                    {/* <div className="ninn-dots-wrapper" ref={dropdownRef}>
             <TbGridDots className="ninn-dots-icon"
               onClick={() => setOpen(!open)}
             />
@@ -273,8 +273,8 @@ const NetworkPage = () => {
               </div>
             )}
           </div> */}
-        </nav>
-      </header>
+                </nav>
+            </header>
             <div className="net-wrapper">
                 <div className="net-container">
                     {/* SIDEBAR */}
@@ -452,50 +452,50 @@ const NetworkPage = () => {
 
                     </main>
                 </div>
-            {/* ================= FOOTER ================= */}
-            <footer className="site-footer">
-                <div className="footer-top">
-                    <div className="footer-left">
-                        <div className="logo">
-                            <Image
-                                src="/logo.svg"
-                                alt="TensorCrest Logo"
-                                width={160}
-                                height={40}
-                                priority
-                            />
+                {/* ================= FOOTER ================= */}
+                <footer className="site-footer">
+                    <div className="footer-top">
+                        <div className="footer-left">
+                            <div className="logo">
+                                <Image
+                                    src="/logo.svg"
+                                    alt="TensorCrest Logo"
+                                    width={160}
+                                    height={40}
+                                    priority
+                                />
+                            </div>
+                            {/* <h3 className="footer-logo">TensorCrest</h3> */}
+                            <p>Stay in the know by subscribing to our newsletter below</p>
+                            <div className="newsletter">
+                                <input type="email" placeholder="Enter your email address" />
+                                <button>→</button>
+                            </div>
                         </div>
-                        {/* <h3 className="footer-logo">TensorCrest</h3> */}
-                        <p>Stay in the know by subscribing to our newsletter below</p>
-                        <div className="newsletter">
-                            <input type="email" placeholder="Enter your email address" />
-                            <button>→</button>
+
+                        <div className="footer-right">
+                            <div className="footer-col">
+                                <h4>Contact</h4>
+                                <a href="#">Contact Form</a>
+                                <a href="#">FAQ</a>
+                                <a href="#">Privacy Policy</a>
+                                <a href="#">T&amp;C</a>
+                            </div>
+                            <div className="footer-col">
+                                <h4>Social</h4>
+                                <a href="#">Facebook</a>
+                                <a href="#">Youtube</a>
+                                <a href="#">Twitter</a>
+                                <a href="#">LinkedIn</a>
+                            </div>
                         </div>
                     </div>
 
-                    <div className="footer-right">
-                        <div className="footer-col">
-                            <h4>Contact</h4>
-                            <a href="#">Contact Form</a>
-                            <a href="#">FAQ</a>
-                            <a href="#">Privacy Policy</a>
-                            <a href="#">T&amp;C</a>
-                        </div>
-                        <div className="footer-col">
-                            <h4>Social</h4>
-                            <a href="#">Facebook</a>
-                            <a href="#">Youtube</a>
-                            <a href="#">Twitter</a>
-                            <a href="#">LinkedIn</a>
-                        </div>
+                    <div className="footer-bottom">
+                        <span>© Researchcrest. All Rights Reserved 2023</span>
+                        <a href="#">Terms &amp; Conditions</a>
                     </div>
-                </div>
-
-                <div className="footer-bottom">
-                    <span>© Researchcrest. All Rights Reserved 2023</span>
-                    <a href="#">Terms &amp; Conditions</a>
-                </div>
-            </footer>
+                </footer>
             </div>
         </>
     );

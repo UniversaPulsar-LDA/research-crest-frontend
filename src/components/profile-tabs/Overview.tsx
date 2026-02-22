@@ -8,54 +8,40 @@ const timelineData = [
   { text: "Best Youth Award", year: 2000 },
 ];
 
-export default function Overview() {
+export default function Overview({ data }: { data?: any }) {
+  if (!data) return <div style={{ padding: '20px' }}>Loading overview...</div>;
+
   return (
     <section className="Ovr-cntnt">
       <section className="abt-card">
         <h4 className="resrch-titl">About</h4>
         <p>
-          I am Brand Gardner, a passionate and detail-oriented professional with
-          a strong interest in building meaningful, efficient, and scalable
-          solutions. I enjoy working at the intersection of creativity and
-          problem-solving, where ideas can be transformed into practical
-          outcomes that create real value. With a curious mindset and a
-          commitment to continuous learning, I consistently explore better ways
-          to approach challenges and improve existing systems. I believe that
-          clear communication, thoughtful planning, and adaptability are key to
-          successful collaboration in any professional environment.
+          {data?.about || "No about information provided."}
         </p>
       </section>
       <section className="eduction-card">
         <h4 className="resrch-titl">Education</h4>
-        <div className="eduu-row">
-          <div className="eduu-left">
-            <p className="eduu-university">Fauget University</p>
-            <span className="edu-year">2012 – 2014</span>
+        {data?.education?.map((edu: any, i: number) => (
+          <div className="eduu-row" key={i}>
+            <div className="eduu-left">
+              <p className="eduu-university">{edu.university}</p>
+              <span className="edu-year">{edu.year_range}</span>
+            </div>
+            <div className="eduu-right">
+              <p className="edu-degree">{edu.degree} {edu.marketing && `in ${edu.marketing}`}</p>
+              {edu.gpa && <span className="edu-gpa">{edu.gpa} GPA</span>}
+            </div>
           </div>
-          <div className="eduu-right">
-            <p className="edu-degree">Master of Science in Marketing</p>
-            <span className="edu-gpa">3.85 / 4 GPA</span>
-          </div>
-        </div>
-        <div className="eduu-row">
-          <div className="eduu-left">
-            <p className="edu-university">Borcelle University</p>
-            <span className="edu-year">2008 – 2011</span>
-          </div>
-          <div className="eduu-right">
-            <p className="edu-degree">Bachelor of Science in Marketing</p>
-            <span className="edu-gpa">3.7 / 4 GPA</span>
-          </div>
-        </div>
+        ))}
       </section>
       <section className="anlytics-card">
         <h4 className="resrch-titl">Analytics</h4>
         <div className="analytics-content">
           <div className="analytics-left">
             <p className="metric-label">Total Views</p>
-            <span className="metric-rangea">35+</span>
-            <p className="metric-sub">Search Apperence</p>
-            <span className="metric-rangea">120</span>
+            <span className="metric-rangea">{data?.analytics_last_7_days?.total_views || 0}</span>
+            <p className="metric-sub">Search Appearance</p>
+            <span className="metric-rangea">{data?.analytics_last_7_days?.search_appearance || 0}</span>
           </div>
           <div className="analytics-right">
             <div className="donut-chart"></div>
@@ -75,17 +61,9 @@ export default function Overview() {
         <section className="skills-ref">
           <h4 className="resrch-titl">Skills</h4>
           <div className="skills-ref-list">
-            <span className="skill-pill dark">Open AI</span>
-            <span className="skill-pill green">Java</span>
-            <span className="skill-pill dark">C#</span>
-            <span className="skill-pill green">AWS - EC2</span>
-            <span className="skill-pill dark">.net</span>
-            <span className="skill-pill green">R</span>
-            <span className="skill-pill dark">Python</span>
-            <span className="skill-pill green">Arduino</span>
-            <span className="skill-pill dark">C++</span>
-            <span className="skill-pill green">R</span>
-            <span className="skill-pill dark">MongoDB</span>
+            {data?.skills?.map((skill: string, idx: number) => (
+              <span key={idx} className={`skill-pill ${idx % 2 === 0 ? 'dark' : 'green'}`}>{skill}</span>
+            ))}
           </div>
         </section>
       </div>
@@ -106,11 +84,11 @@ export default function Overview() {
         {/* Timeline */}
         <div className="sch-style-2">
           <div className="sch-timeline-content">
-            {timelineData.map((item, index) => (
+            {data?.timeline?.map((item: any, index: number) => (
               <div className="sch-content" key={index}>
                 {/* Text + Year */}
                 <div className="sch-data">
-                  <div className="sch-text">{item.text}</div>
+                  <div className="sch-text">{item.event}</div>
                   <div className="sch-year">{item.year}</div>
                 </div>
 
@@ -136,14 +114,14 @@ export default function Overview() {
           </div>
         </div>
       </section>
-<section className="fltr-card">
-  <h4 className="resrch-titl-left">Posts</h4>
+      <section className="fltr-card">
+        <h4 className="resrch-titl-left">Posts</h4>
 
-  <button className="filter-btn">
-    <FaFilter className="filter-icon" />
-    Filters
-  </button>
-</section>
+        <button className="filter-btn">
+          <FaFilter className="filter-icon" />
+          Filters
+        </button>
+      </section>
       <section className="feed-cntnt">
         <p></p>
         <div className="feed-cntnt">
@@ -163,7 +141,7 @@ export default function Overview() {
             </p>
             <div className="feed-immg">
               <img className="feed-img sm" src="/images/bga.png" />
-            <img className="feed-img sm" src="/images/bgga.png" />
+              <img className="feed-img sm" src="/images/bgga.png" />
             </div>
             <div className="feed-actions-row">
               <div className="left-icn">

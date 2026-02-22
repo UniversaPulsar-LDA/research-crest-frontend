@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import Image from "next/image";
+import { useAuth } from "@/contexts/AuthContext";
+import { useProfile } from "@/hooks/useProfile";
 import { Carousel } from "react-bootstrap";
 import { Geist, Geist_Mono } from "next/font/google";
 import { FaLink, FaEnvelope } from "react-icons/fa";
@@ -38,16 +40,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-/* ===== TAB CONFIG ===== */
-const PROFILE_TABS = [
-  { key: "overview", label: "Overview", component: <Overview /> },
-  { key: "research", label: "Research Area", component: <ResearchArea /> },
-  { key: "publications", label: "Publications", component: <Publications /> },
-  { key: "network", label: "Network", component: <Network /> },
-  { key: "projects", label: "Projects", component: <Projects /> },
-  { key: "awards", label: "Awards", component: <Awards /> },
-  { key: "career", label: "Career", component: <Career /> },
-];
+// Removed PROFILE_TABS from here, moved inside component
 
 const researcherData = [
   {
@@ -101,8 +94,40 @@ const slides = chunkArray(researcherData, 2);
 
 export default function ProfilePage() {
   const router = useRouter();
+  const { user } = useAuth();
+  const { profileData, overviewData, isLoading, error } = useProfile();
+
   const [activeTab, setActiveTab] = useState("overview");
   const [showUploadModal, setShowUploadModal] = useState(false);
+
+  /* ===== TAB CONFIG ===== */
+  const PROFILE_TABS = [
+    { key: "overview", label: "Overview", component: <Overview data={overviewData} /> },
+    { key: "research", label: "Research Area", component: <ResearchArea /> },
+    { key: "publications", label: "Publications", component: <Publications /> },
+    { key: "network", label: "Network", component: <Network /> },
+    { key: "projects", label: "Projects", component: <Projects /> },
+    { key: "awards", label: "Awards", component: <Awards /> },
+    { key: "career", label: "Career", component: <Career /> },
+  ];
+
+  if (isLoading) {
+    return <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20vh' }}>Loading Profile...</div>;
+  }
+
+  if (error || !profileData) {
+    return <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20vh', color: 'red' }}>{error || "Profile not found"}</div>;
+  }
+
+  const generalInfo = profileData; // Flat object from backend
+  const researcherProfile = profileData;
+  // TODO: Notable researchers and PYMK are not returned by /me, mock for now or remove
+  const notableResearchers: any[] = [];
+  const peopleYouMayKnow: any[] = [];
+
+  // Chunking for carousels
+  const notableSlides = chunkArray(notableResearchers.length > 0 ? notableResearchers : researcherData, 2);
+  const peopleSlides = chunkArray(peopleYouMayKnow.length > 0 ? peopleYouMayKnow : researcherData, 3);
 
   return (
     <>
@@ -172,34 +197,34 @@ export default function ProfilePage() {
                 <div className="prof-hero-left">
                   <p className={`introo hd moontime`}>I Am</p>
                   <div className="namee-row">
-                    <h1 className="name hd">Brand Gardner</h1>
-                    <img
-                      src="/images/icons/vrfd.svg"
-                      alt="verified-tag"
-                      className="vrfd-tg lg"
-                    />
+                    <h1 className="name hd">{generalInfo.fullName || "Unknown"}</h1>
+                    {generalInfo.verified && (
+                      <img
+                        src="/images/icons/vrfd.svg"
+                        alt="verified-tag"
+                        className="vrfd-tg lg"
+                      />
+                    )}
                   </div>
                   <p className="desgnation hd">
-                    Assistant General Manager – HR
+                    {generalInfo.designation || "No Designation"}
                     <br />
-                    MHRM (University of London)
+                    {generalInfo.finalEducation}
                   </p>
-                  {/* <div className="sttcs lnk">
-                    <span>300+ connections</span>
-                    <span>465 Followers</span>
-                  </div> */}
                   <div className="cntact-info">
                     <p>
-                      <MdOutlineMail /> gardner@gmail.com
+                      <MdOutlineMail /> {(user as any)?.email || "No Email"}
                     </p>
                     <p>
                       <MdOutlineLocationOn />
-                      Location: St. London Street, Southern Park
+                      Location: {generalInfo.location}
                     </p>
                   </div>
                   <div className="tags">
-                    <span className="tgg wht">CSE</span>
-                    <span className="tgg wht">Affiliations: 50</span>
+                    {generalInfo?.tags?.map((tag: string, idx: number) => (
+                      <span className="tgg wht" key={idx}>{tag}</span>
+                    ))}
+                    <span className="tgg wht">Affiliations: {generalInfo?.affiliationsCount || 0}</span>
                     <span className="tgg bluu">300+ Connections</span>
                     <span className="tgg bluu">465 Followers</span>
                     <span
@@ -294,15 +319,15 @@ export default function ProfilePage() {
                 <div className="card-stt">
                   <div className="stat pad">
                     <p>Publications</p>
-                    <h4>42</h4>
+                    <h4>{/* Update when Publication API is ready */}42</h4>
                   </div>
                   <div className="stat pad">
                     <p>Citations</p>
-                    <h4>59265</h4>
+                    <h4>{researcherProfile?.citations || 0}</h4>
                   </div>
                   <div className="stat pad">
                     <p>h-index</p>
-                    <h4>119</h4>
+                    <h4>{researcherProfile?.h_index || 0}</h4>
                   </div>
                 </div>
                 <div className="citation-chart-wrap">
@@ -316,23 +341,11 @@ export default function ProfilePage() {
                       <span>0</span>
                     </div>
                     <div className="chart-bars">
-                      {[
-                        { year: "2019", value: 300 },
-                        { year: "2020", value: 2900 },
-                        { year: "2021", value: 3300 },
-                        { year: "2022", value: 2900 },
-                        { year: "2023", value: 2600 },
-                        { year: "2024", value: 2400 },
-                        { year: "2025", value: 2450 },
-                        { year: "2026", value: 200 },
-                      ].map((item, i) => (
+                      {(researcherProfile?.citations_per_year || []).map((item, i) => (
                         <div className="bar-col" key={i}>
                           <div
                             className="bar-ct"
                             style={{ height: `${(item.value / 3400) * 100}%` }}
-                            // style={{
-                            //   height: `${Math.max((item.value / 3400) * 100, 2)}%`
-                            // }}
                             title={`${item.value} citations`}
                           />
                           <span className="x-label">{item.year}</span>
@@ -342,51 +355,36 @@ export default function ProfilePage() {
                   </div>
                 </div>
                 <div className="card-grid">
-                  <div className="grid-label">Domain & Classification:</div>
-                  <div className="grid-valueu">
-                    Electrical Engineering
-                    <br />
-                    Faculty of Technology
-                    <br />
-                    Advanced Polymers
-                  </div>
+                  {generalInfo?.department && (
+                    <>
+                      <div className="grid-label">Department:</div>
+                      <div className="grid-valueu">{generalInfo.department}</div>
+                    </>
+                  )}
                   <div className="grid-label">Research Interests:</div>
                   <div className="grid-valueu">
-                    Renewable Energy
-                    <br />
-                    Internet of Things
-                    <br />
-                    Machine Learning
+                    {researcherProfile?.research_interests?.map((interest, idx) => (
+                      <span key={idx}>{interest}<br /></span>
+                    ))}
                   </div>
-                  <div className="grid-label">Advisors:</div>
-                  <div className="grid-valueu"></div>
                   <div className="grid-label">PhD Advisors:</div>
                   <div className="grid-valueu">
-                    <span className="green">Dr. Emily Carter</span>
-                    <br />
-                    <span className="green">Dr. Steven Harris</span>
+                    {researcherProfile?.advisors?.phd_advisors?.map((adv, idx) => (
+                      <span className="green" key={idx}>{adv}<br /></span>
+                    ))}
                   </div>
                   <div className="grid-label">MS Advisors:</div>
                   <div className="grid-valueu">
-                    <span className="green">Prof. Dr. Jonathan Miles</span>
-                    <br />
-                    <span className="green">Prof. Dr. Rebecca Thornton</span>
+                    {researcherProfile?.advisors?.ms_advisors?.map((adv, idx) => (
+                      <span className="green" key={idx}>{adv}<br /></span>
+                    ))}
                   </div>
                   <div className="grid-label">Responsibilities:</div>
                   <div className="grid-valueu">
                     <ul className="resp-list">
-                      <li>
-                        Introduction to Materials and Manufacture (Module
-                        Co-ordinator)
-                      </li>
-                      <li>Materials and Manufacture</li>
-                      <li>
-                        Sustainable Development and Environmental Management
-                      </li>
-                      <li>
-                        Design and Sustainable Development (Distance Learning
-                        Module)
-                      </li>
+                      {researcherProfile?.responsibilities?.map((resp, idx) => (
+                        <li key={idx}>{resp}</li>
+                      ))}
                     </ul>
                   </div>
                 </div>
@@ -402,16 +400,16 @@ export default function ProfilePage() {
                   controls
                   interval={null} // ✅ autoplay OFF
                 >
-                  {slides.map((group, index) => (
+                  {notableSlides.map((group, index) => (
                     <Carousel.Item key={index}>
                       <div className="researcher-row">
-                        {group.map((item, i) => (
+                        {group.map((item: any, i: number) => (
                           <div className="rsrcher-item" key={i}>
-                            <img src={item.img} alt={item.name} />
+                            <img src={item.researcher_image || item.img || "https://randomuser.me/api/portraits/lego/1.jpg"} alt={item.name} />
                             <div className="resrcher-info">
                               <h6>{item.name}</h6>
-                              <p>{item.role}</p>
-                              <a href={item.link}>See Details</a>
+                              <p>{item.position || item.role}</p>
+                              <a href={`/researcher/${item.researcher_id || 'unknown'}`}>See Details</a>
                             </div>
                           </div>
                         ))}
@@ -430,50 +428,20 @@ export default function ProfilePage() {
                   interval={null}
                   className="notable-carousel"
                 >
-                  <Carousel.Item>
-                    <div className="notable-row">
-                      <div className="notable-user">
-                        <img src="https://randomuser.me/api/portraits/men/45.jpg" />
-                        <p>Alfredo</p>
-                        <span>Professor</span>
-                        <p className="sub">alfredo@gmail.com</p>
+                  {peopleSlides.map((group, index) => (
+                    <Carousel.Item key={index}>
+                      <div className="notable-row">
+                        {group.map((item: any, i: number) => (
+                          <div className="notable-user" key={i}>
+                            <img src={item.researcher_image || item.img || "https://randomuser.me/api/portraits/lego/1.jpg"} alt={item.name} />
+                            <p>{item.name}</p>
+                            <span>{item.position || item.role}</span>
+                            <p className="sub">{item.researcher_email || ""}</p>
+                          </div>
+                        ))}
                       </div>
-                      <div className="notable-user">
-                        <img src="https://randomuser.me/api/portraits/women/52.jpg" />
-                        <p>Cahaya</p>
-                        <span>Teacher</span>
-                        <p>cahaya@gmail.com</p>
-                      </div>
-                      <div className="notable-user">
-                        <img src="https://randomuser.me/api/portraits/women/68.jpg" />
-                        <p>Mariana</p>
-                        <span>Student</span>
-                        <p>mariana@gmail.com</p>
-                      </div>
-                    </div>
-                  </Carousel.Item>
-                  <Carousel.Item>
-                    <div className="notable-row">
-                      <div className="notable-user">
-                        <img src="https://randomuser.me/api/portraits/men/46.jpg" />
-                        <p>James</p>
-                        <span>Professor</span>
-                        <p className="sub">alfredo@gmail.com</p>
-                      </div>
-                      <div className="notable-user">
-                        <img src="https://randomuser.me/api/portraits/women/53.jpg" />
-                        <p>Susan</p>
-                        <span>Teacher</span>
-                        <p>susan@gmail.com</p>
-                      </div>
-                      <div className="notable-user">
-                        <img src="https://randomuser.me/api/portraits/women/69.jpg" />
-                        <p>Linda</p>
-                        <span>Student</span>
-                        <p>linda@gmail.com</p>
-                      </div>
-                    </div>
-                  </Carousel.Item>
+                    </Carousel.Item>
+                  ))}
                 </Carousel>
                 <button className="read-more">SEE MORE</button>
               </div>

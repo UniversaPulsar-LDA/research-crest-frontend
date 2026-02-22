@@ -1,7 +1,9 @@
 import { useRouter } from "next/router";
 import {
+  useState,
   useEffect,
-  //useRef
+  useRef,
+  useCallback
 } from "react";
 import Head from "next/head";
 import Image from "next/image";
@@ -12,6 +14,8 @@ import { IoIosArrowDown } from "react-icons/io";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { IoMdSearch } from "react-icons/io";
 import { Geist, Geist_Mono } from "next/font/google";
+import { useFeed } from "@/hooks/useFeed";
+import moment from "moment";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { FaRegEye } from "react-icons/fa";
 import { FaUserPlus } from "react-icons/fa6";
@@ -45,60 +49,54 @@ function NextArrow(props: any) {
 
 export default function FeedPage() {
   const router = useRouter();
+  const {
+    feedData,
+    posts,
+    isLoading,
+    isFetchingMore,
+    hasMore,
+    error,
+    loadMore,
+    createPost,
+    toggleLike
+  } = useFeed(10);
+
+  const [postText, setPostText] = useState("");
+  const [isPosting, setIsPosting] = useState(false);
+
   useEffect(() => {
     document.body.classList.add("feed-body");
     return () => {
       document.body.classList.remove("feed-body");
     };
   }, []);
-  /* 🔹 FEED DATA (Dynamic) */
-  const feedData = [
-    {
-      id: 1,
-      user: "Railly Watson",
-      avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-      text: "Golden, comforting, and irresistibly flavorful—this dish is a celebration of taste and tradition.",
-      images: [
-        "https://images.unsplash.com/photo-1512621776951-a57141f2eefd",
-        "/images/bgga.png",
-      ],
+
+  const observer = useRef<IntersectionObserver | null>(null);
+  const lastPostElementRef = useCallback(
+    (node: HTMLDivElement) => {
+      if (isFetchingMore) return;
+      if (observer.current) observer.current.disconnect();
+
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          loadMore();
+        }
+      });
+
+      if (node) observer.current.observe(node);
     },
-    {
-      id: 2,
-      user: "James Garry",
-      avatar: "https://randomuser.me/api/portraits/men/33.jpg",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce non diam eleifend.",
-      images: [],
-    },
-    {
-      id: 3,
-      user: "Sam Stain",
-      avatar: "https://randomuser.me/api/portraits/men/31.jpg",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc malesuada magna orci.",
-      images: ["https://images.unsplash.com/photo-1501785888041-af3ef285b470"],
-    },
-    {
-      id: 4,
-      user: "Luna Rodrigage",
-      avatar: "https://randomuser.me/api/portraits/women/43.jpg",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce non diam eleifend.",
-      images: [],
-    },
-    {
-      id: 5,
-      user: "Shinomi Watts",
-      avatar: "https://randomuser.me/api/portraits/women/60.jpg",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce non diam eleifend.",
-      images: ["/images/bga.png"],
-    },
-    {
-      id: 6,
-      user: "Korey Jackson",
-      avatar: "https://randomuser.me/api/portraits/women/10.jpg",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce non diam eleifend.",
-      images: [],
-    },
-  ];
+    [isFetchingMore, hasMore, loadMore]
+  );
+
+  const handleCreatePost = async () => {
+    if (!postText.trim()) return;
+    setIsPosting(true);
+    const success = await createPost({ post_text: postText, visibility: "public" });
+    if (success) {
+      setPostText("");
+    }
+    setIsPosting(false);
+  };
   return (
     <>
       <Head>
@@ -154,258 +152,214 @@ export default function FeedPage() {
       </header>
       <div className="feed-page">
         <div className="left-content">
-          <aside className="profile-card">
-            <div
-              className="profile-header"
-              style={{
-                backgroundImage: "url('/images/cvr.jpg')",
-              }}
-            >
-              <img src="/images/prof.jpg" alt="" />
-            </div>
-            <div className="profile-body pad">
-              {/* <h4
-                onClick={() => router.push("/profile-page")}
-                style={{ cursor: "pointer" }}
+          {isLoading && !feedData ? (
+            <div>Loading Profile...</div>
+          ) : feedData?.profile_sidebar ? (
+            <aside className="profile-card">
+              <div
+                className="profile-header"
+                style={{
+                  backgroundImage: `url('${feedData.profile_sidebar.cover_photo || '/images/cvr.jpg'}')`,
+                }}
               >
-                Brand Gardner
-              </h4> */}
-              <div className="namee-row cntr">
-                <h4
-                  className="name hd"
-                  onClick={() => router.push("/profile-page")}
-                  style={{ cursor: "pointer" }}
-                >
-                  Brand Gardner
-                </h4>
-                <img
-                  src="/images/icons/vrfd.svg"
-                  alt="verified-tag"
-                  className="vrfd-tg"
-                />
+                <img src={feedData.profile_sidebar.profile_photo || "/images/prof.jpg"} alt="" />
               </div>
-              <p className="subttl">
-                Assistant General Manager - HR | Business HR & Strategy
-                <br />
-                MHRM (University of London)
-              </p>
+              <div className="profile-body pad">
+                <div className="namee-row cntr">
+                  <h4
+                    className="name hd"
+                    onClick={() => router.push("/profile-page")}
+                    style={{ cursor: "pointer" }}
+                  >
+                    {feedData.profile_sidebar.full_name}
+                  </h4>
+                  {feedData.profile_sidebar.verified && (
+                    <img
+                      src="/images/icons/vrfd.svg"
+                      alt="verified-tag"
+                      className="vrfd-tg"
+                    />
+                  )}
+                </div>
+                <p className="subttl">
+                  {feedData.profile_sidebar.designation || ""}
+                  <br />
+                  {feedData.profile_sidebar.finalEducation || ""}
+                </p>
 
-              <div className="profile-stats">
-                <div>
-                  <span>
-                    <h3>Publications</h3>
-                  </span>
-                  <span>42</span>
+                <div className="profile-stats">
+                  <div>
+                    <span>
+                      <h3>Publications</h3>
+                    </span>
+                    <span>{feedData.profile_sidebar.publications_count || 0}</span>
+                  </div>
+                  <div>
+                    <span>
+                      <h3>h-index</h3>
+                    </span>
+                    <span>{feedData.profile_sidebar.h_index || 0}</span>
+                  </div>
+                  <div>
+                    <span>
+                      <h3>Followers</h3>
+                    </span>
+                    <span>{feedData.profile_sidebar.followers_count || 0}</span>
+                  </div>
                 </div>
-                <div>
-                  <span>
-                    <h3>h-index</h3>
-                  </span>
-                  <span>18</span>
-                </div>
-                <div>
-                  <span>
-                    <h3>Followers</h3>
-                  </span>
-                  <span>324</span>
-                </div>
-              </div>
 
-              <div className="profile-tags">
-                <span>CSE</span>
-                <span>Current Affiliations: 50</span>
-                <HiOutlineDotsHorizontal className="dots-icon" />
+                <div className="profile-tags">
+                  <span>{feedData.profile_sidebar.domain_classification?.[0] || 'Domain'}</span>
+                  <span>Current Affiliations: {feedData.profile_sidebar.affiliations_count || 0}</span>
+                  <HiOutlineDotsHorizontal className="dots-icon" />
+                </div>
+
+                {feedData.profile_sidebar.domain_classification && (
+                  <div className="profile-section">
+                    <h3>Domain & Classification:</h3>
+                    <p>
+                      {feedData.profile_sidebar.domain_classification.join(", ")}
+                    </p>
+                  </div>
+                )}
+
+                {feedData.profile_sidebar.research_interests && (
+                  <div className="profile-section">
+                    <h3>Research Interests:</h3>
+                    <p>
+                      {feedData.profile_sidebar.research_interests.join(", ")}
+                    </p>
+                  </div>
+                )}
               </div>
-              <div className="profile-section">
-                <h3>Domain & Classification:</h3>
-                <p>
-                  Electrical Engineering
-                  <br />
-                  Faculty of Technology
-                  <br />
-                  Advance Polymers and Composite Research Group
-                </p>
-              </div>
-              <div className="profile-section">
-                <h3>Research Interests:</h3>
-                <p>
-                  Renewable Energy,
-                  <br />
-                  Internet of Things,
-                  <br />
-                  Machine Learning
-                </p>
-              </div>
-              <div className="profile-section">
-                <h3>Education:</h3>
-                <p>
-                  University of California - Los Angeles (MS. in CS)
-                  <br />
-                  Massachusetts Institute of Technology (BSc. in CSE)
-                  <br />
-                </p>
-              </div>
-              <div className="profile-section">
-                <h3>BSc. Advisors:</h3>
-                <p className="green">
-                  Dr. Emily Carter
-                  <br />
-                  Dr. Steven Harris
-                </p>
-              </div>
-              <div className="profile-section">
-                <h3>MS Advisors:</h3>
-                <p className="green">
-                  Prof. Dr. Jonathan Miles
-                  <br />
-                  Prof. Dr. Rebecca Thornton
-                </p>
-              </div>
-              <div className="profile-section">
-                <h3>Awards:</h3>
-                <p className="green">Dijkstra Prize</p>
-              </div>
-            </div>
-          </aside>
+            </aside>
+          ) : null}
         </div>
         <div className="feed-content">
           {/* HEADER */}
-          <div className="feed-header">
-            <div>
-              {/* <input type="text" placeholder="Search" /> */}
-              <IoMdSearch className="sch-icon srchbr-icn" />
-              <div className="feed-actions">
-                <span>
-                  <Image
-                    src="/images/icons/srch.svg"
-                    alt="Search Icon"
-                    width={45}
-                    height={45}
-                    priority
-                    className="srchbr-icn"
-                  />
-                </span>
-              </div>
-            </div>
-            <div>
-              <span className="icn">
-                <Image
-                  src="/images/icons/ply.svg"
-                  alt=""
-                  width={45}
-                  height={45}
-                  className="srchbr-icn"
-                />
-              </span>
-              <span className="icn">
-                <Image
-                  src="/images/icons/phto.svg"
-                  alt=""
-                  width={45}
-                  height={45}
-                  className="srchbr-icn"
-                />
-              </span>
-              <span className="icn">
-                <Image
-                  src="/images/icons/ppr.svg"
-                  alt=""
-                  width={45}
-                  height={45}
-                  className="srchbr-icn"
-                />
-              </span>
+          <div className="feed-header form-header">
+            <div style={{ width: '100%', display: 'flex', gap: '10px' }}>
+              <input
+                type="text"
+                placeholder="What's on your mind?"
+                value={postText}
+                onChange={(e) => setPostText(e.target.value)}
+                style={{ flex: 1, padding: '10px', borderRadius: '5px', border: '1px solid #ccc' }}
+              />
+              <button
+                onClick={handleCreatePost}
+                className="read-more crv"
+                disabled={isPosting || !postText.trim()}>
+                {isPosting ? 'Posting...' : 'Post'}
+              </button>
             </div>
           </div>
           {/* 🔹 DYNAMIC FEED CARDS */}
-          {feedData.map((item) => (
-            <div className="feed-card" key={item.id}>
-              <div className="feed-top">
-                <div className="feed-user">
-                  <img src={item.avatar} alt={item.user} />
-                  <span>{item.user}</span>
+          {isLoading && !feedData ? (
+            <p style={{ textAlign: "center", marginTop: "20px" }}>Loading feed...</p>
+          ) : error ? (
+            <p style={{ textAlign: "center", color: "red", marginTop: "20px" }}>{error}</p>
+          ) : (
+            <>
+              {posts.map((item) => (
+                <div className="feed-card" key={item.post_id || (item as any).id}>
+                  <div className="feed-top">
+                    <div className="feed-user">
+                      <img src={item.author_photo || "https://randomuser.me/api/portraits/lego/1.jpg"} alt={item.author_name} />
+                      <div style={{ display: "flex", flexDirection: "column" }}>
+                        <span>{item.author_name}</span>
+                        <small style={{ color: "#888", fontSize: "12px" }}>{moment(item.created_at).fromNow()}</small>
+                      </div>
+                    </div>
+                    <HiOutlineDotsHorizontal className="dots-icon" />
+                  </div>
+
+                  <p className="feed-text">{item.post_text}</p>
+
+                  {/* IMAGES (Conditional) */}
+                  {item.media_urls && item.media_urls.length > 0 && (
+                    <div className="feed-immg">
+                      {item.media_urls.map((img, i) => (
+                        <img key={i} src={img} className="feed-img sm" alt="Post Request Media" />
+                      ))}
+                    </div>
+                  )}
+
+                  {/* ACTIONS */}
+                  <div className="feed-actions-row">
+                    <div className="left-icn">
+                      <span
+                        onClick={() => toggleLike(item.post_id || (item as any).id)}
+                        style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "5px", color: item.is_liked ? "red" : "inherit" }}
+                      >
+                        <Image
+                          src={item.is_liked ? "/images/icons/hrt-filled.svg" : "/images/icons/hrt.svg"}
+                          alt="Like"
+                          width={15}
+                          height={15}
+                          style={item.is_liked ? { filter: "invert(20%) sepia(85%) saturate(7000%) hue-rotate(350deg) brightness(100%) contrast(100%)" } : {}}
+                        />
+                        {item.like_count > 0 && <span>{item.like_count}</span>}
+                      </span>
+                      <span style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "5px" }}>
+                        <Image
+                          src="/images/icons/cht.svg"
+                          alt="Comment"
+                          width={15}
+                          height={15}
+                        />
+                        {item.comment_count > 0 && <span>{item.comment_count}</span>}
+                      </span>
+                      <span>
+                        <Image
+                          src="/images/icons/shr.svg"
+                          alt="Share"
+                          width={15}
+                          height={15}
+                        />
+                        {item.share_count > 0 && <span>{item.share_count}</span>}
+                      </span>
+                    </div>
+                    <span>
+                      <Image
+                        src="/images/icons/wslst.svg"
+                        alt="Save"
+                        width={15}
+                        height={15}
+                      />
+                    </span>
+                  </div>
                 </div>
-                <HiOutlineDotsHorizontal className="dots-icon" />
-              </div>
-
-              <p className="feed-text">{item.text}</p>
-
-              {/* IMAGES (Conditional) */}
-              {item.images.length > 0 && (
-                <div className="feed-immg">
-                  {item.images.map((img, i) => (
-                    <img key={i} src={img} className="feed-img sm" />
-                  ))}
+              ))}
+              {/* Infinite Scroll trigger target */}
+              {hasMore && (
+                <div ref={lastPostElementRef} style={{ height: "20px", background: "transparent" }}>
+                  {isFetchingMore && <p style={{ textAlign: "center" }}>Loading older posts...</p>}
                 </div>
               )}
-
-              {/* ACTIONS */}
-              <div className="feed-actions-row">
-                <div className="left-icn">
-                  <span>
-                    <Image
-                      src="/images/icons/hrt.svg"
-                      alt=""
-                      width={15}
-                      height={15}
-                    />
-                  </span>
-                  <span>
-                    <Image
-                      src="/images/icons/cht.svg"
-                      alt=""
-                      width={15}
-                      height={15}
-                    />
-                  </span>
-                  <span>
-                    <Image
-                      src="/images/icons/shr.svg"
-                      alt=""
-                      width={15}
-                      height={15}
-                    />
-                  </span>
-                </div>
-                <span>
-                  <Image
-                    src="/images/icons/wslst.svg"
-                    alt=""
-                    width={15}
-                    height={15}
-                  />
-                </span>
-              </div>
-            </div>
-          ))}
+            </>
+          )}
         </div>
         <div className="right-content">
           <div className="side-card artl-card">
             <h4 className="side-title">SUGGESTED ARTICLE / BLOG</h4>
-            <div className="article-item sm">
-              <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b" />
-              <div>
-                <span className="tag orange">EDUCATION</span>
-                <p>
-                  In an era of budget cuts, funding for science and research is
-                  being slashed
-                </p>
-                <small>August 22 · 8:48 pm</small>
-              </div>
-            </div>
-            <div className="article-item sm">
-              <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d" />
-              <div>
-                <span className="tag green">SOCIETY</span>
-                <p>
-                  The Safety Council has issued the following news release
-                  regarding…
-                </p>
-                <small>August 22 · 8:40 pm</small>
-              </div>
-            </div>
-
-            <button className="read-more crv">READ MORE</button>
+            {feedData?.suggested_articles && feedData.suggested_articles.length > 0 ? (
+              feedData.suggested_articles.slice(0, 3).map((article) => (
+                <div className="article-item sm" key={article.article_id}>
+                  <img src={article.article_thumbnail || "https://images.unsplash.com/photo-1503676260728-1c00da094a0b"} alt="article thumb" />
+                  <div>
+                    <span className="tag orange">{article.article_category || "ARTICLE"}</span>
+                    <p>{article.article_title}</p>
+                    <small>{moment(article.published_time).format("MMMM D · h:mm a")}</small>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p style={{ padding: '10px' }}>No suggested articles right now.</p>
+            )}
+            {feedData?.suggested_articles && feedData.suggested_articles.length > 3 && (
+              <button className="read-more crv">READ MORE</button>
+            )}
           </div>
           {/* <!-- POST ACTIVITY --> */}
           <div className="side-card activity-card">
@@ -416,39 +370,26 @@ export default function FeedPage() {
               </span>
             </div>
 
-            <div className="activity-item">
-              <img src="https://randomuser.me/api/portraits/women/12.jpg" />
-              <span>My Wedding Celebration</span>
-              <div className="right-ico">
-                <span>
-                  <FaRegEye />
-                </span>
-                <b>7,890</b>
-              </div>
-            </div>
+            {feedData?.post_activities && feedData.post_activities.length > 0 ? (
+              feedData.post_activities.slice(0, 3).map((activity) => (
+                <div className="activity-item" key={activity.activity_id}>
+                  <img src={activity.activity_thumbnail || "https://randomuser.me/api/portraits/lego/1.jpg"} alt="activity thumb" />
+                  <span>{activity.activity_title}</span>
+                  <div className="right-ico">
+                    <span>
+                      <FaRegEye />
+                    </span>
+                    <b>{activity.view_count.toLocaleString()}</b>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p style={{ padding: '10px' }}>No recent post activity.</p>
+            )}
 
-            <div className="activity-item">
-              <img src="https://randomuser.me/api/portraits/men/44.jpg" />
-              <span>Christmas Celebration</span>
-              <div className="right-ico">
-                <span>
-                  <FaRegEye />
-                </span>
-                <b>600</b>
-              </div>
-            </div>
-
-            <div className="activity-item">
-              <img src="https://randomuser.me/api/portraits/women/32.jpg" />
-              <span>My Graduation</span>
-              <div className="right-ico">
-                <span>
-                  <FaRegEye />
-                </span>
-                <b>390</b>
-              </div>
-            </div>
-            <button className="read-more crv">SEE MORE</button>
+            {feedData?.post_activities && feedData.post_activities.length > 3 && (
+              <button className="read-more crv">SEE MORE</button>
+            )}
           </div>
           {/* <!-- NOTABLE --> */}
           <div className="side-card notable-card">
@@ -458,57 +399,32 @@ export default function FeedPage() {
                 <HiOutlineDotsHorizontal className="dots-icon" />
               </span>
             </div>
-            <Carousel
-              indicators={false}
-              controls={true}
-              interval={null}
-              className="notable-carousel"
-            >
-              <Carousel.Item>
-                <div className="notable-row">
-                  <div className="notable-user">
-                    <img src="https://randomuser.me/api/portraits/men/45.jpg" />
-                    <p>Alfredo</p>
-                    <span>Professor</span>
-                    <p className="sub">alfredo@gmail.com</p>
-                  </div>
-                  <div className="notable-user">
-                    <img src="https://randomuser.me/api/portraits/women/52.jpg" />
-                    <p>Cahaya</p>
-                    <span>Teacher</span>
-                    <p>cahaya@gmail.com</p>
-                  </div>
-                  <div className="notable-user">
-                    <img src="https://randomuser.me/api/portraits/women/68.jpg" />
-                    <p>Mariana</p>
-                    <span>Student</span>
-                    <p>mariana@gmail.com</p>
-                  </div>
-                </div>
-              </Carousel.Item>
-              <Carousel.Item>
-                <div className="notable-row">
-                  <div className="notable-user">
-                    <img src="https://randomuser.me/api/portraits/men/46.jpg" />
-                    <p>James</p>
-                    <span>Professor</span>
-                    <p className="sub">alfredo@gmail.com</p>
-                  </div>
-                  <div className="notable-user">
-                    <img src="https://randomuser.me/api/portraits/women/53.jpg" />
-                    <p>Susan</p>
-                    <span>Teacher</span>
-                    <p>susan@gmail.com</p>
-                  </div>
-                  <div className="notable-user">
-                    <img src="https://randomuser.me/api/portraits/women/69.jpg" />
-                    <p>Linda</p>
-                    <span>Student</span>
-                    <p>linda@gmail.com</p>
-                  </div>
-                </div>
-              </Carousel.Item>
-            </Carousel>
+            {feedData?.notable && feedData.notable.length > 0 ? (
+              <Carousel
+                indicators={false}
+                controls={true}
+                interval={null}
+                className="notable-carousel"
+              >
+                {/** Split into chunks of 3 for the carousel items */}
+                {Array.from({ length: Math.ceil(feedData.notable.length / 3) }).map((_, i) => (
+                  <Carousel.Item key={i}>
+                    <div className="notable-row">
+                      {feedData.notable?.slice(i * 3, i * 3 + 3).map((person) => (
+                        <div className="notable-user" key={person.user_id || person.notable_id}>
+                          <img src={person.profile_photo || "https://randomuser.me/api/portraits/lego/2.jpg"} alt={person.name} />
+                          <p>{person.name}</p>
+                          <span>{person.role || "Researcher"}</span>
+                          {person.email && <p className="sub" style={{ wordBreak: 'break-all' }}>{person.email}</p>}
+                        </div>
+                      ))}
+                    </div>
+                  </Carousel.Item>
+                ))}
+              </Carousel>
+            ) : (
+              <p style={{ padding: '10px', textAlign: 'center' }}>No notable profiles.</p>
+            )}
             <button className="read-more crv">SEE MORE</button>
           </div>
           <section className="side-card suggst-section">
